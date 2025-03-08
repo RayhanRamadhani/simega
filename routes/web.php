@@ -1,13 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/chatbot', function () {
-    return view('chatbot');
+Route::middleware('auth')->group(function () {
+    Route::get('/chatbot', function () {
+        return view('chatbot');
+    });
+    Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
 });
 
-Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::get('/logout', [AuthController::class, 'logout']);
