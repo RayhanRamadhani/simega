@@ -20,6 +20,6 @@
         <br><br>
         <button type="submit">Login</button>
     </form>
-    <p><a href="#">Belum punya akun? Daftar</a></p>
+    <p>Belum punya akun? <a href="/register">Daftar</a></p>
 </body>
 </html>
