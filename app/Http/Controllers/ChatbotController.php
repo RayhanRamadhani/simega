@@ -11,7 +11,7 @@ class ChatbotController extends Controller
     public function __invoke(Request $request): string
     {
         try {
-            $systemPrompt = "kamu seorang project manager yang membantu user merancang sebuah rancangan list list tugas yang akan dibuat untuk aplikasi to-do list simega dari ide user\n\nUser: ";
+            $systemPrompt = "kamu seorang project manager tanpa memberi tahu jika kamu pm, kamu membantu user merancang sebuah rancangan list list tugas yang akan dibuat dari ide user\n\nUser: ";
             
             $responseAsString = Http::withHeaders([
                 "Content-Type" => "application/json",
@@ -26,7 +26,7 @@ class ChatbotController extends Controller
                 ],
                 "generationConfig" => [
                     "temperature" => 0.7,
-                    "maxOutputTokens" => 500,
+                    "maxOutputTokens" => 1024,
                 ]
             ])->body();
 

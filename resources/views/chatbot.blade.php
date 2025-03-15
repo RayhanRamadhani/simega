@@ -9,7 +9,7 @@
   <!-- End JavaScript -->
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css">
+  {{-- <link rel="stylesheet" href="/style.css"> --}}
   <!-- End CSS -->
 
 </head>
@@ -19,7 +19,7 @@
 
   <!-- Header -->
   <div class="top">
-    <img src="/images/roki_avatar.png" alt="Avatar" width="100">
+    <img src="/images/roki_avatar.png" alt="Avatar" width="100px">
     <div>
       <p>Roki</p>
       <small>Online</small>
@@ -30,8 +30,8 @@
   <!-- Chat -->
   <div class="messages">
     <div class="left message">
-      <img src="/images/roki_avatar.png" alt="Avatar">
-      <p>Hai! butuh bantuan untuk rancangan tugas? spill aja di sini!</p>
+      <img src="/images/roki_avatar.png" alt="Avatar" width="60px">
+      <p>Hai! butuh bantuan untuk rancangan tugas? tanya Roki aja sini!</p>
     </div>
   </div>
   <!-- End Chat -->
@@ -39,8 +39,8 @@
   <!-- Footer -->
   <div class="bottom">
     <form>
-      <input type="text" id="message" name="message" placeholder="Enter message..." autocomplete="off">
-      <button type="submit"></button>
+      <input type="text" id="message" name="message" placeholder="Ketik pesan..." autocomplete="off">
+      <button type="submit">Kirim</button>
     </form>
   </div>
   <!-- End Footer -->
