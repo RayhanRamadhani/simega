@@ -8,11 +8,11 @@
 </head>
 <body class="bg-gray-100">
     <nav class="bg-white p-4 flex justify-between items-center">
-        <div class="flex items-center">
+        <div class="flex items-center w-full">
             <button class="text-2xl mr-4">&#9776;</button> <!-- Hamburger Menu -->
             <span class="font-bold text-lg">SIMEGA</span>
 
-            <a href="/logout" class="border border-red-500 text-red-500 px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition">Logout</a>
+            <a href="/logout" class="ml-auto border border-red-500 text-red-500 px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition">Logout</a>
         </div>
     </nav>
 
