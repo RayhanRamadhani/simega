@@ -10,7 +10,7 @@
         <nav class="bg-white p-4 flex justify-between items-center">
             <div class="flex items-center">
                 <img src="{{ asset('images/icon.png')}}" class="w-16 h-16">
-                <span class="font-bold text-lg text-left">SIMEGA</span>
+                <span class="font-bold text-xl text-left">SIMEGA</span>
             </div>
             <a href="/login" class="border border-blue-500 text-blue-500 px-4 py-2 rounded-full hover:bg-blue-500 hover:text-white transition">Login</a>
         </nav>
