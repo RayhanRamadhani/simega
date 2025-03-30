@@ -1,64 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Chatbot Roki | SIMEGA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  <!-- JavaScript -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <!-- End JavaScript -->
-
-  <!-- CSS -->
-  {{-- <link rel="stylesheet" href="/style.css"> --}}
-  <!-- End CSS -->
-
-</head>
-
+@extends('layouts.app')
+@section('content')
 <body>
-<div class="chat">
+  <div class="grid-rows-none bg-slate-200">
 
-  <!-- Header -->
-  <div class="top">
-    <img src="/images/roki_avatar.png" alt="Avatar" width="100px">
-    <div>
-      <p>Roki</p>
-      <small>Online</small>
+    <!-- Header -->
+    <div class="flex bg-slate-500 pb-4">
+      <img class="flex max-w-28 rounded-full mr-4" src="/images/roki_avatar.png" alt="roki_vatar">
+      <div class="flex-auto content-center grid-rows-2 align-middle bg-red-950">
+        <h1 class="text-3xl bg-green-500 p4">Roki</h1>
+        <small class="flex bg-red-500 p4">Online</small>
+      </div>
     </div>
-  </div>
-  <!-- End Header -->
 
-  <!-- Chat -->
-  <div class="messages">
-    <div class="left message">
-      <img src="/images/roki_avatar.png" alt="Avatar" width="60px">
-      <p>Hai! butuh bantuan untuk rancangan tugas? tanya Roki aja sini!</p>
+    <!-- Chat -->
+    <div class="flex col-auto bg-blue-500">
+        <img class="flex max-w-14 rounded-full mr-4" src="/images/roki_avatar.png" alt="Avatar">
+        <p class="flex rounded-full bg-slate-100 p-4">Hai! butuh bantuan untuk rancangan tugas? tanya Roki aja sini!</p>
     </div>
-  </div>
-  <!-- End Chat -->
 
-  <!-- Footer -->
-  <div class="bottom">
-    <form>
-      <input type="text" id="message" name="message" placeholder="Ketik pesan..." autocomplete="off">
-      <button type="submit">Kirim</button>
-    </form>
-  </div>
-  <!-- End Footer -->
+    <!-- Footer chat -->
+    <div class="bottom">
+      <form>
+        <input type="text" id="message" name="message" placeholder="Ketik pesan..." autocomplete="off">
+        <button type="submit">Kirim</button>
+      </form>
+    </div>
 
-</div>
+  </div>
 </body>
 
 <script>
-  //Broadcast messages
+  //Submit
   $("form").submit(function (event) {
     event.preventDefault();
 
-    //Stop empty messages
     if ($("form #message").val().trim() === '') {
       return;
     }
 
-    //Disable form sementara
+    //Disable submit sementara
     $("form #message").prop('disabled', true);
     $("form button").prop('disabled', true);
 
@@ -73,14 +53,14 @@
       }
     }).done(function (res) {
 
-      //Populate sending message
+      //Kirim pesan
       $(".messages > .message").last().after('<div class="right message">' +
         '<p>' + $("form #message").val() + '</p>' +
         '</div>');
 
-      //Populate receiving message
+      //Terima pesan
       $(".messages > .message").last().after('<div class="left message">' +
-        '<img src="/images/roki_avatar.png" alt="Roki vatar">' +
+        '<img src="/images/roki_avatar.png" alt="Roki vatar" width="60px">' +
         '<p>' + res + '</p>' +
         '</div>');
 
@@ -95,4 +75,4 @@
   });
 
 </script>
-</html>
+@endsection

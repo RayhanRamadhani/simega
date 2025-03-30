@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@theme {
+    --font-roboto: "Montserrat", sans-serif; 
+  }
+  
+@layer components {
+.typography {
+    p {
+    font-size: var(--text-base);
+    color: var(--color-gray-700);
+    }
+    h1 {
+    font-size: var(--text-2xl--line-height);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-950);
+    }
+    }
+}

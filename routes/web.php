@@ -11,13 +11,9 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/chatbot', function () {
-        return view('chatbot');
-    });
+    Route::get('/chatbot', [ChatbotController::class, 'chatbot'])->name('chatbot');
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');

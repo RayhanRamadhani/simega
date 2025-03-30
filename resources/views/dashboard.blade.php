@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<title>Dashboard</title>
 <div class="container">
     <div class="flex justify-left items-center">
         <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">

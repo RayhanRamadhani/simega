@@ -16,7 +16,7 @@ class ChatbotController extends Controller
             $responseAsString = Http::withHeaders([
                 "Content-Type" => "application/json",
                 "x-goog-api-key" => env('GEMINI_API_KEY')
-            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro-exp-02-05:generateContent', [
+            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro-exp-03-25:generateContent', [
                 "contents" => [
                     [
                         "parts"=> [
@@ -41,7 +41,12 @@ class ChatbotController extends Controller
             }
             return "Error: incomplete response";
         } catch (Throwable $e) {
-            return $e->getMessage();
+            return "Terjadi kesalahan: " . $e->getMessage();
         }
+    }
+
+    public function chatbot()
+    {
+        return view('chatbot');
     }
 }
