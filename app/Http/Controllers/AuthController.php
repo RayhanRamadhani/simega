@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str; // Perbaiki penulisan 'Str'
 use App\Models\User;
 
 class AuthController extends Controller
@@ -45,19 +46,32 @@ class AuthController extends Controller
 
     function store(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'min:6'],
         ]);
 
+        // Membuat username acak yang unik
+        do {
+            $randomUsername = Str::random(10); // Menghasilkan username acak sepanjang 10 karakter
+        } while (User::where('username', $randomUsername)->exists()); // Memastikan username unik
+
+        // Membuat user baru
         $user = User::create([
-            'name' => $request->name,
+            'firstname' => $request->firstname, // Menggunakan firstname
+            'lastname' => $request->lastname,   // Menggunakan lastname
+            'username' => $randomUsername, // Menyimpan username acak
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password), // Password yang telah di-hash
         ]);
 
+        // Login otomatis setelah registrasi
         Auth::login($user);
+
+        // Redirect ke halaman login setelah berhasil registrasi
         return redirect('/login');
     }
 }

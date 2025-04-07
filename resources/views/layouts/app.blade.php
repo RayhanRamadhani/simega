@@ -76,7 +76,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
-                        <img src="{{ asset('images/icon.png')}}" alt="Avatar" class="w-10 h-10 rounded-full">
+                        <a href="/profile"><img src="{{ Auth::user()->photo }}" alt="photo profile" class="w-10 h-10 rounded-full"></a>
                     </div>
                 </div>
             </header>

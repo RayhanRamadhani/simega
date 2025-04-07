@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::get('/', function () {
     return view ('homepage');
@@ -14,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chatbot', [ChatbotController::class, 'chatbot'])->name('chatbot');
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
