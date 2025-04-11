@@ -8,6 +8,7 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::get('/', function () {
@@ -19,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/task', [TaskController::class, 'show'])->name('task');
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -35,12 +37,12 @@ Route::get('/register/email/verify', function () {
 
 Route::get('/register/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
- 
+
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
- 
+
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
