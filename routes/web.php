@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/task', [TaskController::class, 'show'])->name('task');
+    Route::get('/task', [TaskController::class, 'task'])->name('task');
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
