@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboard;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/chatbot', [ChatbotController::class, 'chatbot'])->name('chatbot');
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('dashboardAdmin');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/task', [TaskController::class, 'task'])->name('task');
+    Route::resource('task', TaskController::class);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');

@@ -23,7 +23,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/dashboard');
+            }
         }
 
         return back()->withErrors([
@@ -46,7 +51,6 @@ class AuthController extends Controller
 
     function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -54,24 +58,20 @@ class AuthController extends Controller
             'password' => ['required', 'min:6'],
         ]);
 
-        // Membuat username acak yang unik
         do {
-            $randomUsername = Str::random(10); // Menghasilkan username acak sepanjang 10 karakter
-        } while (User::where('username', $randomUsername)->exists()); // Memastikan username unik
+            $randomUsername = Str::random(10);
+        } while (User::where('username', $randomUsername)->exists());
 
-        // Membuat user baru
         $user = User::create([
-            'firstname' => $request->firstname, // Menggunakan firstname
-            'lastname' => $request->lastname,   // Menggunakan lastname
-            'username' => $randomUsername, // Menyimpan username acak
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'username' => $randomUsername,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Password yang telah di-hash
+            'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
 
-        // Login otomatis setelah registrasi
         Auth::login($user);
-
-        // Redirect ke halaman login setelah berhasil registrasi
         return redirect('/login');
     }
 }

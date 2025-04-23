@@ -3,63 +3,72 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function task()
+    public function index()
     {
-        $tasks = Task::where('id_user', Auth::id())->get();
-        return view('task', compact('tasks'));
+        $task = Task::where('userid', Auth::id())->get();
+        return view('task.index', compact('task'));
     }
 
     public function create()
     {
-        return view('tasks.create');
+        return view('task.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'deadline' => 'nullable|date',
+            'name' => 'required|string|max:255',
+            'deadline' => 'required|date',
+            'description' => 'required',
         ]);
 
         Task::create([
-            'id_user' => Auth::id(),
-            'title' => $request->title,
-            'description' => $request->description,
+            'userid' => Auth::id(),
+            'name' => $request->name,
             'deadline' => $request->deadline,
+            'description' => $request->description
         ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Tugas berhasil ditambahkan!');
+        return redirect()->route('task.index')->with('success', 'Tugas berhasil ditambahkan.');
     }
 
     public function edit(Task $task)
     {
-        return view('tasks.edit', compact('task'));
+        return view('task.edit', compact('task'));
     }
 
     public function update(Request $request, Task $task)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'deadline' => 'nullable|date',
-            'status' => 'boolean',
+            'name' => 'required|string|max:255',
+            'deadline' => 'required|date',
+            'description' => 'required',
         ]);
 
-        $task->update($request->only('title', 'description', 'deadline', 'status'));
+        $task->update([
+            'name' => $request->name,
+            'deadline' => $request->deadline,
+            'description' => $request->description,
+        ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Tugas diperbarui!');
+        return redirect()->route('task.index')->with('success', 'Tugas berhasil diperbarui.');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index')->with('success', 'Tugas dihapus!');
+        return redirect()->route('task.show')->with('success', 'Tugas berhasil dihapus.');
     }
+
+    // function show()
+    // {
+    //     $user= Auth::user();
+    //     return view('task');
+    // }
+
 }
