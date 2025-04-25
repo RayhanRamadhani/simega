@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::get('/', function () {
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('dashboardAdmin');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::resource('task', TaskController::class);
+    Route::resource('pengguna', UserController::class);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
