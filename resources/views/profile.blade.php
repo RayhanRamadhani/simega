@@ -18,8 +18,13 @@
     <br>
     <div class="flex items-start gap-5">
         <img src="{{ Auth::user()->photo }}" class="w-24 h-24 rounded-full border-4 border-gray-500" alt="Profile Picture">
-        <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
-        <p class="text-base text-blue-400">Sampai 26/06/2026</p>
+        @php $user = Auth::user(); @endphp
+        @if($user->tier === 'pro')
+            <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
+            <p class="text-base text-blue-400">Sampai 26/06/2026</p>
+        @else
+            <span class="border border-gray-400 text-gray-600 px-4 py-1 rounded-lg">FREE</span>
+        @endif
     </div>
     <br>
     <div class="flex flex-col">
@@ -39,8 +44,6 @@
     <div class="flex flex-col">
         <p class="text-lg font-semibold">Email</p>
         <p>{{ Auth::user()->email }}</p>
-        <p class="text-lg font-semibold">Password</p>
-        <p>{{ Auth::user()->password }}</p>
     </div>
     <br>
     <br>

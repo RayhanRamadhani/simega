@@ -42,7 +42,7 @@
                             <td class="py-2 px-4">{{ $user->lastname }}</td>
                             <td class="py-2 px-4">{{ $user->username }}</td>
                             <td class="py-2 px-4">{{ $user->email }}</td>
-                            <td class="py-2 px-4">{{ $user->role }}</td>
+                            <td class="py-2 px-4">{{ $user->tier }}</td>
                             <td class="py-2 px-4">{{ $user->created_at->format('d-m-Y') }}</td>
                         </tr>
                     @empty
