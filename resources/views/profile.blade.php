@@ -23,7 +23,7 @@
             <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
             <p class="text-base text-blue-400">Sampai 26/06/2026</p>
         @else
-            <span class="border border-gray-400 text-gray-600 px-4 py-1 rounded-lg">FREE</span>
+            <span class="border border-gray-400 text-gray-600 px-4 py-1 rounded-lg">{{ Auth::user()->tier }}</span>
         @endif
     </div>
     <br>
