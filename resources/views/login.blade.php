@@ -16,6 +16,12 @@
             <h2 class="text-2xl font-semibold text-blue-600">Selamat Datang!</h2>
             <p class="text-gray-600 mb-4">Yuk login ke akun kamu dulu</p>
 
+            @if(session('success'))
+                <div class="flex bg-green-100 text-green-700 p-4 mb-4 rounded-lg" role="alert">
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <p class="text-red-500 text-sm">{{ $errors->first() }}</p>
             @endif

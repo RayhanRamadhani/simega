@@ -11,12 +11,22 @@ class ChatbotController extends Controller
     public function __invoke(Request $request): string
     {
         try {
+            $apiKey = env('GEMINI_API_KEY');
+            if (empty($apiKey)) {
+                return "Error: API key kosong di .env";
+            }
+            
             $systemPrompt = "kamu seorang project manager tanpa memberi tahu jika kamu pm, kamu membantu user merancang sebuah rancangan list list tugas yang akan dibuat dari ide user\n\nUser: ";
+            
+            \Log::info('Gemini request', [
+                'api_key_length' => strlen($apiKey),
+                'content' => $request->post('content')
+            ]);
             
             $responseAsString = Http::withHeaders([
                 "Content-Type" => "application/json",
-                "x-goog-api-key" => env('GEMINI_API_KEY')
-            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro-exp-03-25:generateContent', [
+                "x-goog-api-key" => $apiKey
+            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', [
                 "contents" => [
                     [
                         "parts"=> [

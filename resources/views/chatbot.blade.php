@@ -1,78 +1,104 @@
 @extends('layouts.app')
 @section('content')
-<body>
-  <div class="grid-rows-none bg-slate-200">
-
-    <!-- Header -->
-    <div class="flex bg-slate-500 pb-4">
-      <img class="flex max-w-28 rounded-full mr-4" src="/images/roki_avatar.png" alt="roki_vatar">
-      <div class="flex-auto content-center grid-rows-2 align-middle bg-red-950">
-        <h1 class="text-3xl bg-green-500 p4">Roki</h1>
-        <small class="flex bg-red-500 p4">Online</small>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <div class="container flex flex-col h-screen">
+    <!-- Header Chat -->
+    <div class="flex justify-left items-center">
+      <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">
+      <div class="ml-4 text-left">
+          <h1 class="text-5xl font-bold">Hai,</h1>
+          <h2 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">{{ Auth::user()->firstname }}!</h2>
+          <p class="text-gray-600 text-lg">Butuh bantuan? tanya Roki yuk!</p>
       </div>
     </div>
 
-    <!-- Chat -->
-    <div class="flex col-auto bg-blue-500">
-        <img class="flex max-w-14 rounded-full mr-4" src="/images/roki_avatar.png" alt="Avatar">
-        <p class="flex rounded-full bg-slate-100 p-4">Hai! butuh bantuan untuk rancangan tugas? tanya Roki aja sini!</p>
+    <!-- Isi chat -->
+    <div class="messages flex-grow p-4 overflow-y-auto">
+      <div class="left message flex mb-4">
+        <img class="w-10 h-10 rounded-full mr-2 self-end" src="/images/roki_avatar.png" alt="Avatar">
+        <p class="flex bg-gray-300 rounded-lg p-3 max-w-xs">Hai! Butuh bantuan untuk rancangan tugas? Tanya Roki aja sini!</p>
+      </div>
     </div>
 
     <!-- Footer chat -->
-    <div class="bottom">
-      <form>
-        <input type="text" id="message" name="message" placeholder="Ketik pesan..." autocomplete="off">
-        <button type="submit">Kirim</button>
+    <div class="p-1 bg-white border-t sticky bottom-0 z-20">
+      <form class="flex gap-2">
+        <input type="text" id="message" name="message" 
+               class="flex-grow border rounded-full px-4 py-2" 
+               placeholder="Ketik pesan..." autocomplete="off">
+        <button type="submit" 
+                class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600">
+          Kirim
+        </button>
       </form>
     </div>
-
   </div>
-</body>
 
 <script>
-  //Submit
-  $("form").submit(function (event) {
-    event.preventDefault();
-
-    if ($("form #message").val().trim() === '') {
-      return;
-    }
-
-    //Disable submit sementara
-    $("form #message").prop('disabled', true);
-    $("form button").prop('disabled', true);
-
-    $.ajax({
-      url: "/chatbot",
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': "{{csrf_token()}}"
-      },
-      data: {
-        "content": $("form #message").val()
+  $(document).ready(function() {
+    $("form").submit(function(event) {
+      event.preventDefault();
+      
+      const messageText = $("#message").val().trim();
+      if (messageText === '') {
+        return;
       }
-    }).done(function (res) {
 
-      //Kirim pesan
-      $(".messages > .message").last().after('<div class="right message">' +
-        '<p>' + $("form #message").val() + '</p>' +
-        '</div>');
-
-      //Terima pesan
-      $(".messages > .message").last().after('<div class="left message">' +
-        '<img src="/images/roki_avatar.png" alt="Roki vatar" width="60px">' +
-        '<p>' + res + '</p>' +
-        '</div>');
-
-      //Cleanup
-      $("form #message").val('');
-      $(document).scrollTop($(document).height());
-
-      //Enable form
-      $("form #message").prop('disabled', false);
-      $("form button").prop('disabled', false);
+      // Gaboleh ngetik pas lagi proses 
+      $("#message").prop('disabled', true);
+      $("form button").prop('disabled', true);
+      
+      // Prompt user
+      $(".messages").append(
+        '<div class="right message flex justify-end mb-4">' +
+        '<p class="bg-blue-300 rounded-lg p-3 max-w-xs">' + messageText + '</p>' +
+        '</div>'
+      );
+      
+      // Auto scroll ke bawah
+      $(".messages").scrollTop($(".messages")[0].scrollHeight);
+      
+      $.ajax({
+        url: "/chatbot",
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': "{{csrf_token()}}"
+        },
+        data: {
+          "content": messageText
+        }
+      }).done(function(res) {
+        // Parse markdown ke HTML dari Marked.js
+        const formattedResponse = marked.parse(res);
+        
+        // Rsepon roki make HTML
+        $(".messages").append(
+          '<div class="left message flex mb-4">' +
+          '<img src="/images/roki_avatar.png" alt="Roki avatar" class="w-10 h-10 rounded-full mr-2 self-start">' + 
+          '<div class="chat-bubble bg-gray-300 rounded-lg p-3 markdown-content">' + formattedResponse + '</div>' +
+          '</div>'
+        );
+        
+        // Auto scroll ke bawah
+        $(".messages").scrollTop($(".messages")[0].scrollHeight);
+        
+      }).fail(function(error) {
+        // Cek error
+        $(".messages").append(
+          '<div class="left message flex mb-4">' +
+          '<img src="/images/roki_avatar.png" alt="Roki avatar" class="w-10 h-10 rounded-full mr-2 self-end">' +
+          '<p class="bg-red-100 rounded-lg p-3 max-w-xs">Maaf, ada kesalahan teknis.</p>' +
+          '</div>'
+        );
+        console.error("Error:", error);
+        
+      }).always(function() {
+        // Buka lagi form ngetiknya pas udah selesai proses
+        $("#message").prop('disabled', false);
+        $("form button").prop('disabled', false);
+        $("#message").val('').focus();
+      });
     });
   });
-
 </script>
 @endsection
