@@ -52,14 +52,19 @@
                 </ul>
                 <div class="relative inline-block text-left">
                     <button id="dropdownButton" class="px-4 py-2 text-gray-800 rounded-md inline-flex items-center w-fit gap-6">
-                        Daftar Tugas <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        Daftar Tugas
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                          </svg>
+                        </svg>
                     </button>
                     <div id="dropdownMenu" class="hidden absolute w-48 h-64 bg-gray-200 rounded-md shadow-md mt-2">
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-300">Tugas 1</a>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-300">Tugas 2</a>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-300">Tugas 3</a>
+                        @forelse($tasks as $task)
+                            <a href="{{ route('task.index', $task->userid) }}" class="block px-4 py-2 hover:bg-gray-300">
+                                {{ $task->name }}
+                            </a>
+                        @empty
+                            <span class="block px-4 py-2 text-gray-500">Tidak ada tugas</span>
+                        @endforelse
                     </div>
                 </div>
             </nav>

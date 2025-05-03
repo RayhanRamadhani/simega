@@ -69,10 +69,4 @@ class TaskController extends Controller
         return redirect()->route('task.show')->with('success', 'Tugas berhasil dihapus.');
     }
 
-    // function show()
-    // {
-    //     $user= Auth::user();
-    //     return view('task');
-    // }
-
 }

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Task;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,11 @@ class AppServiceProvider extends ServiceProvider
                 ->subject('Verify Email Address')
                 ->line('Click the button below to verify your email address.')
                 ->action('Verify Email Address', $url);
+        });
+
+        View::composer('layouts.app', function ($view) {
+            $tasks = Task::where('userid', auth()->id())->latest()->take(5)->get();
+            $view->with('tasks', $tasks);
         });
     }
 }
