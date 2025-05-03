@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('dashboardAdmin');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::resource('task', TaskController::class);
     Route::resource('pengguna', UserController::class);
     Route::resource('packages', PackageController::class);

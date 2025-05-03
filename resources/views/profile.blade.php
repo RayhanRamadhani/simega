@@ -11,13 +11,13 @@
                 <span>Profile</span>
             </a>
         </h1>
-        <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+        <a onclick="toggleModal(true)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
         </svg></a>
     </div>
     <br>
     <div class="flex items-start gap-5">
-        <img src="{{ Auth::user()->photo }}" class="w-24 h-24 rounded-full border-4 border-gray-500" alt="Profile Picture">
+        <img src="{{ Auth::user()->photo }}" class="w-24 h-24 rounded-full" alt="Profile Picture">
         @php $user = Auth::user(); @endphp
         @if($user->tier === 'pro')
             <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
@@ -59,6 +59,62 @@
         </a>
     </div>
 </div>
+
+<div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+        <h2 class="text-xl font-semibold mb-4">Edit Profile</h2>
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-3">
+                <label for="photo" class="block font-medium">Photo</label>
+                <input type="file" name="photo" id="photo" class="border w-full px-3 py-2 rounded">
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="block font-medium">Username</label>
+                <input type="text" name="username" value="{{ Auth::user()->username }}" class="border w-full px-3 py-2 rounded" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="firstname" class="block font-medium">Nama Depan</label>
+                <input type="text" name="firstname" value="{{ Auth::user()->firstname }}" class="border w-full px-3 py-2 rounded" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="lastname" class="block font-medium">Nama Belakang</label>
+                <input type="text" name="lastname" value="{{ Auth::user()->lastname }}" class="border w-full px-3 py-2 rounded" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="block font-medium">Email</label>
+                <input type="email" name="email" value="{{ Auth::user()->email }}" class="border w-full px-3 py-2 rounded bg-gray-100 cursor-not-allowed" readonly>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="toggleModal(false)" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Simpan</button>
+            </div>
+        </form>
+
+        <button onclick="toggleModal(false)" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+    </div>
+</div>
+
+<script>
+    function toggleModal(show) {
+        const modal = document.getElementById('editProfileModal');
+        if (show) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        } else {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+</script>
+
 
 <a href="{{ route('chatbot') }}" class="fixed bottom-0 right-4 flex flex-col items-center z-40 group">
     <div class="mb-1 px-4 py-1 rounded-full border border-blue-500 text-sm font-semibold shadow bg-white text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600 transition-all group-hover:scale-105">
