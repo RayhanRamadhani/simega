@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-    @foreach ($task as $task)
     <div class="flex justify-between items-center w-full">
         <h1 class="text-2xl font-bold flex items-center space-x-2">
             <a href="/dashboard" class="flex items-center">
@@ -12,9 +11,11 @@
                 <span>{{ $task->name }}</span>
             </a>
         </h1>
-        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-        </svg></a>
+        <a onclick="toggleModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+            </svg>
+        </a>
     </div>
     <br>
     <div class="flex mt-5 ml-7">
@@ -26,6 +27,42 @@
         </svg>
         <a href="#" class="ml-4 text-blue-500">Tambah list tugas</a>
     </div>
-    @endforeach
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold mb-4">Edit Tugas</h2>
+            <form method="POST" action="{{ route('task.update', $task->idtask) }}">
+                @csrf
+                @method('PUT')
+                <label class="block text-sm font-medium mb-1">Nama Tugas</label>
+                <input type="text" name="name" value="{{ $task->name }}" class="w-full border border-gray-300 p-2 rounded mb-4" required>
+
+                <label class="block text-sm font-medium mb-1">Deskripsi</label>
+                <textarea name="description" class="w-full border border-gray-300 p-2 rounded mb-4" rows="4">{{ $task->description }}</textarea>
+
+                <label class="block text-sm font-medium mb-1">Deadline</label>
+                <input type="date" name="deadline" value="{{ $task->deadline ? \Carbon\Carbon::parse($task->deadline)->format('Y-m-d') : '' }}" class="w-full border border-gray-300 p-2 rounded mb-4">
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="toggleModal()" class="bg-gray-200 px-4 py-2 rounded">Batal</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+    </script>
+</div>
+
+<div class="fixed bottom-0 right-4 flex flex-col items-center z-40">
+    <div class="mb-1 px-4 py-1 rounded-full border text-sm font-semibold shadow bg-white text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600">
+        Butuh bantuan?
+    </div>
+    <img src="{{ asset('images/bb.png') }}" alt="Help Bot" class="w-20 h-20 object-contain">
 </div>
 @endsection

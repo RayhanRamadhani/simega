@@ -10,7 +10,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $task = Task::where('userid', Auth::id())->get();
+        $task = Task::where('userid', Auth::id())->latest()->first();
         return view('task.index', compact('task'));
     }
 
@@ -39,11 +39,15 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        return view('task.edit', compact('task'));
+        return view('task.index', compact('task'));
     }
 
     public function update(Request $request, Task $task)
     {
+        if ($task->userid !== Auth::id()) {
+            abort(403);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'deadline' => 'required|date',

@@ -24,4 +24,11 @@
         </div>
     </form>
 </div>
+
+<div class="fixed bottom-0 right-4 flex flex-col items-center z-40">
+    <div class="mb-1 px-4 py-1 rounded-full border text-sm font-semibold shadow bg-white text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600">
+        Butuh bantuan?
+    </div>
+    <img src="{{ asset('images/bb.png') }}" alt="Help Bot" class="w-20 h-20 object-contain">
+</div>
 @endsection
