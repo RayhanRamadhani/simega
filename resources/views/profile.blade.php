@@ -117,7 +117,7 @@
 
 
 <a href="{{ route('chatbot') }}" class="fixed bottom-0 right-4 flex flex-col items-center z-40 group">
-    <div class="mb-1 px-4 py-1 rounded-full border border-blue-500 text-sm font-semibold shadow bg-white text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600 transition-all group-hover:scale-105">
+    <div class="mb-1 min-h-9 min-w-4 rounded-full border border-blue-500 bg-white bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text px-4 py-1 text-sm font-semibold text-transparent shadow-xl transition-all group-hover:scale-105">
         Butuh bantuan?
     </div>
     <img src="{{ asset('images/bb.png') }}" alt="Help Bot" class="w-24 h-20 object-contain">
