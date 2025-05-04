@@ -60,7 +60,7 @@
                     </button>
                     <div id="dropdownMenu" class="hidden absolute w-48 h-64 bg-gray-200 rounded-md shadow-md mt-2">
                         @forelse($tasks as $task)
-                            <a href="{{ route('task.index', $task->userid) }}" class="block px-4 py-2 hover:bg-gray-300">
+                            <a href="{{ route('task.edit', $task->idtask) }}" class="block px-4 py-2 hover:bg-gray-300">
                                 {{ $task->name }}
                             </a>
                         @empty

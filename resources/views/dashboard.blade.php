@@ -50,13 +50,13 @@
   <div class="flex flex-row flex-wrap mt-4 p-3 justify-content-start w-full mx-auto gap-4" data-aos="fade-up" data-aos-duration="2500">
     {{-- task cardnya terus looping data --}}
     @forelse ($tasks as $task)
-    <div class="task-card mt-4 p-6 rounded-2xl shadow-xl w-full md:w-5/12 lg:w-3/12 h-auto bg-white cursor-pointer" 
-         onclick="window.location='{{ route('task.edit', $task->idtask) }}'" 
+    <div class="task-card mt-4 p-6 rounded-2xl shadow-xl w-full md:w-5/12 lg:w-3/12 h-auto bg-white cursor-pointer"
+         onclick="window.location='{{ route('task.edit', $task->idtask) }}'"
          data-task-id="{{ $task->idtask }}">
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{{ $task->name }}</h1>
-          
+
           <!-- Bintang bisa dipencet -->
           <form action="{{ route('task.toggle-priority', $task->idtask) }}" method="POST" class="inline" onclick="event.stopPropagation()">
             @csrf
@@ -76,7 +76,7 @@
         </div>
         <p>{{ $task->status ? '100%' : '0%' }}</p>
       </div>
-      
+
       <!-- Deadline -->
       <div class="flex justify-between">
         @php
@@ -84,21 +84,21 @@
           $deadline = \Carbon\Carbon::parse($task->deadline);
           $isDeadlineToday = $today->isSameDay($deadline);
         @endphp
-        
+
         @if($isDeadlineToday)
           <h2 class="font-semibold text-red-500 animate-blink">Deadline hari ini</h2>
         @else
           <h2 class="font-semibold text-gray-300">Deadline {{ $deadline->format('d M Y') }}</h2>
         @endif
       </div>
-      
+
       <!-- List Tugas -->
       <div class="flex flex-col mt-2 justify-start p-3 bg-blue-100 rounded-2xl">
         <ul class="list-disc pl-5 space-y-1">
           <li>Ambil data dari list tugasnya di sini</li>
         </ul>
       </div>
-      
+
       <!-- Tombol hapus -->
       <div class="flex mt-3 justify-end">
         <form action="{{ route('task.destroy', $task->idtask) }}" method="POST" class="inline" onclick="event.stopPropagation()">

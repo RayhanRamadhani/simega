@@ -2,8 +2,9 @@
 
 @section('content')
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <form action="{{ route('listTask.store', $task->idtask) }}" method="POST" class="bg-white rounded-2xl shadow-lg w-[90%] max-w-md p-6 relative">
+    <form action="{{ route('list-task.store') }}" method="POST" class="bg-white rounded-2xl shadow-lg w-[90%] max-w-md p-6 relative">
         @csrf
+        <input type="hidden" name="idtask" value="{{ $task->idtask }}">
         <label class="block mb-4">
             <span class="text-lg font-semibold">Nama List Tugas</span>
             <input type="text" name="listname" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Masukkan nama tugas" required>

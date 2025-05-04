@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::resource('task', TaskController::class);
+    Route::resource('list-task', ListTaskController::class);
     Route::resource('pengguna', UserController::class);
     Route::resource('packages', PackageController::class);
     Route::get('/send-email', function(){
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('task.store');
     Route::patch('/tasks/{task}/toggle-priority', [TaskController::class, 'togglePriority'])
     ->name('task.toggle-priority');
+    Route::patch('/list-task/{id}/toggle', [ListTaskController::class, 'toggleStatus'])->name('list-task.toggle');
 });
 
 //////////////// GUEST

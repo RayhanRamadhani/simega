@@ -18,19 +18,19 @@ class TaskController extends Controller
         if (is_null($user->email_verified_at)) {
             return redirect()->route('send-email');
         }
-        
+
         $totaltugas = Task::where('userid', $user_id)->count();
         $listtugasselesai = Task::where('userid', $user_id)
             ->where('status', 'completed')
             ->count();
         $sisalisttugas = $totaltugas - $listtugasselesai;
-        
+
         $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
-        
+
         return view('dashboard', compact(
-            'tasks', 
-            'totaltugas', 
-            'listtugasselesai', 
+            'tasks',
+            'totaltugas',
+            'listtugasselesai',
             'sisalisttugas',
             'chartData'
         ));
@@ -61,9 +61,12 @@ class TaskController extends Controller
         return redirect()->route('dashboard')->with('success', 'Tugas berhasil ditambahkan.');
     }
 
-    public function edit(Task $task)
+    public function edit($idtask)
     {
-        return view('task.index', compact('task'));
+        $task = Task::findOrFail($idtask);
+        $listTasks = $task->listTasks()->latest()->get();
+
+        return view('task.index', compact('task', 'listTasks'));
     }
 
     public function update(Request $request, Task $task)
@@ -97,7 +100,7 @@ class TaskController extends Controller
     {
         $task->ispriority = !$task->ispriority;
         $task->save();
-        
+
         return back();
     }
 

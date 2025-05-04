@@ -25,4 +25,9 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'userid');
     }
+
+    public function listTasks()
+    {
+        return $this->hasMany(ListTask::class, 'idtask', 'idtask');
+    }
 }

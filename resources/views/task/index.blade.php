@@ -25,8 +25,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-blue-500">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
-        <a href="#" class="ml-4 text-blue-500">Tambah list tugas</a>
+        <a href="{{ route('list-task.create', ['idtask' => $task->idtask]) }}" class="ml-4 text-blue-500">Tambah list tugas</a>
     </div>
+
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
         <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
             <h2 class="text-lg font-semibold mb-4">Edit Tugas</h2>
@@ -48,6 +49,28 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div class="mt-4 ml-7">
+        @foreach ($listTasks as $list)
+            <div class="flex items-center space-x-3 my-2">
+                <form action="{{ route('list-task.toggle', $list->id) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="flex items-center">
+                        @if ($list->isdone)
+                            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        @else
+                            <div class="w-5 h-5 border-2 border-black rounded-full"></div>
+                        @endif
+                    </button>
+                </form>
+                <span class="{{ $list->isdone ? 'line-through' : '' }}">{{ $list->listname }}</span>
+            </div>
+        @endforeach
     </div>
 
     <script>
