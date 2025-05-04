@@ -113,7 +113,8 @@
       </div>
     </div>
     @empty
-      <div class="w-full text-center p-8">
+      <div class="w-full justify-items-center text-center p-8">
+        <img src="{{ asset('images/rokiberdiricutted.png') }}" alt="Maskot" class="w-32 h-30">
         <p class="text-gray-500">Belum ada tugas. Yuk mulai buat tugas pertamamu!</p>
         <a href="{{ route('task.create') }}" class="mt-4 inline-block px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600">Buat Tugas</a>
       </div>
