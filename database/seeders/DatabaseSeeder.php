@@ -16,14 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(5)->create();
 
-        // User::factory()->create([
-        //     'firstname' => 'Admin',
-        //     'lastname' => 'Kece',
-        //     'username' => 'Adminbro1234',
-        //     'email' => 'admin@gmail.com',
-        //     'password' => Hash::make('1234'),
-        //     'role' => 'admin',
-        // ]);
+        User::factory()->create([
+            'firstname' => 'Admin',
+            'lastname' => 'Kece',
+            'username' => 'Adminbro1234',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('1234'),
+            'role' => 'admin',
+        ]);
         $this->call([
             PackageSeeder::class,
         ]);

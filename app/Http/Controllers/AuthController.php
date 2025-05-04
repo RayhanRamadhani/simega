@@ -27,18 +27,18 @@ class AuthController extends Controller
             $user = Auth::user();
             if ($user->role === 'admin') {
                 return redirect()->intended('/admin/dashboard');
-            } else {
+            } else if ($user->role === 'user') {
                 if ($user->email_verified_at === null) {
                     return redirect()->route('send-email')->with('error', 'Kode OTP sudah dikirim, silakan cek email Anda.');
                 } else {
                     return redirect()->intended('/dashboard');
                 }
             }
+        } else {
+            return back()->withErrors([
+                'email' => 'Email atau password salah',
+            ])->onlyInput('email');
         }
-
-        return back()->withErrors([
-            'email' => 'Email atau password salah',
-        ])->onlyInput('email');
     }
 
     function logout(Request $request)
@@ -72,10 +72,10 @@ class AuthController extends Controller
             'lastname' => $request->lastname,
             'username' => $randomUsername,
             'email' => $request->email,
+            'email_expired_at' => null,
             'password' => Hash::make($request->password),
             'otp' => random_int(100000, 999999),
             'otp_expired_at' => Carbon::now()->addMinutes(5),
-            'email_expired_at' => null,
             'role' => 'user',
         ]);
 
@@ -96,21 +96,35 @@ class AuthController extends Controller
 
         $user = Auth::user();
         
-        if ($user->otp != $request->otp) {
-            return back()->withErrors(['otp' => 'Kode OTP tidak valid']);
-        }
-        
         if (Carbon::now()->isAfter($user->otp_expired_at)) {
-            return back()->withErrors(['otp' => 'Yah, kode OTPnya sudah kadaluarsa, silakan kirim ulang']);
-        } else {
-            $user->email_verified_at = Carbon::now();
-            $user->save();
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+            return back()->withErrors(['otp' => 'Yah, kode OTPnya udah kadaluarsa nih. Coba kirim ulang kode OTPnya.']);
         }
+
+        if ($user->otp != $request->otp) {
+            return back()->withErrors(['otp' => 'Kode OTP tidak valid!']);
+        }
+
+        $user->email_verified_at = Carbon::now();
+        $user->save();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         
         return redirect()->route('login')
-            ->with('success', 'Registrasi berhasil! Silahkan login dengan akun yang telah Anda buat.');
+            ->with('success', 'Registrasi berhasil! Silahkan login dengan akun yang telah Kamu buat.');
+    }
+
+    public function resendOtp(Request $request)
+    {
+        $user = Auth::user();
+        
+        $user->otp = random_int(100000, 999999);
+        $user->otp_expired_at = Carbon::now()->addMinutes(5);
+        $user->save();
+
+        \Mail::to($user->email)->send(new \App\Mail\SendEmail());
+        
+        return redirect()->route('verify-email')
+            ->with('success', 'Kirim ulang kode OTP berhasil! Cek kode OTP yang baru.');
     }
 }

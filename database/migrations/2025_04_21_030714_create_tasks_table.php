@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->date('deadline');
             $table->longText('description');
+            $table->tinyText('status')->default(null)->nullable();
+            $table->tinyText('ispriority')->default(null)->nullable();
             $table->timestamps();
         });
     }

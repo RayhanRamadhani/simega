@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
         .sidebar-open .sidebar {
             transform: translateX(0);
@@ -85,12 +86,16 @@
                     </div>
                 </div>
             </header>
-            <main id="main-container" class="main-container flex-1 transition-all duration-300 ease-in-out p-5 mt-16">
+            <main id="main-container" class="main-container overflow-scroll flex-1 transition-all duration-300 ease-in-out p-5 mt-16">
                 @yield('content')
             </main>
         </div>
     </div>
 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
     <script>
          document.getElementById('dropdownButton').addEventListener('click', function () {
         document.getElementById('dropdownMenu').classList.toggle('hidden');

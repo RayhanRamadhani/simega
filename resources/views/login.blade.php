@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     @vite(['resources/css/app.css'])
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen" data-aos="fade-up">
     <div class="bg-white shadow-lg rounded-2xl flex overflow-hidden max-w-2xl">
         <div class="bg-blue-200 p-6 flex items-center justify-center">
             <img src="{{ asset('images/rokiberdiri.png') }}" alt="Raccoon" class="h-64">
@@ -55,5 +56,9 @@
             <p class="mt-4 text-center text-gray-600">Belum punya akun? <a href="{{ route('register') }}" class="text-blue-500">Daftar</a></p>
         </div>
     </div>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html>

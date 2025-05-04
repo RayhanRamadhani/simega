@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/chatbot', [ChatbotController::class, 'chatbot'])->name('chatbot');
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('dashboardAdmin');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,6 +36,11 @@ Route::middleware('auth')->group(function () {
         {
         return view('auth.verify-email');})->name('verify-email');
     Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify.otp');
+    Route::get('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend.otp');
+    Route::get('/tasks/create', [TaskController::class, 'create'])->name('task.create');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('task.store');
+    Route::patch('/tasks/{task}/toggle-priority', [TaskController::class, 'togglePriority'])
+    ->name('task.toggle-priority');
 });
 
 //////////////// GUEST

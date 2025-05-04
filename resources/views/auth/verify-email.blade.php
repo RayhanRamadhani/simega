@@ -6,7 +6,7 @@
     <title>Verifikasi OTP</title>
     @vite(['resources/css/app.css'])
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen" data-aos="fade-up">
     <div class="bg-white shadow-lg rounded-2xl flex overflow-hidden max-w-2xl">
         <div class="bg-blue-200 p-6 flex items-center justify-center">
             <img src="{{ asset('images/rokiberdiri.png') }}" alt="Rakun" class="h-64">
@@ -16,8 +16,14 @@
             <h2 class="text-2xl font-semibold text-blue-600">Verifikasi Email!</h2>
             <p class="text-gray-600 mb-4">Cek email kamu, Roki udah kirim kamu kode OTP!</p>
 
-            @if ($errors->any())
-                <p class="text-red-500 text-sm">{{ $errors->first() }}</p>
+            @if(session('success'))
+                <div class="flex bg-green-100 text-green-700 p-4 mb-4 rounded-lg" role="alert">
+                    <p>{{ session('success') }}</p>
+                </div>
+            @elseif ($errors->any())
+                <div class="flex bg-red-100 text-red-700 p-4 mb-4 rounded-lg" role="alert">
+                    <p>{{ $errors->first() }}</p>
+                </div>
             @endif
 
             <form action="{{ route('verify.otp') }}" method="POST">
@@ -34,7 +40,7 @@
                 <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600">Verifikasi</button>
             </form>
 
-            <p class="mt-4 text-center text-gray-600">Kode belum masuk? <a href="{{ route('send-email') }}" class="text-blue-500">Kirim Ulang</a></p>
+            <p class="mt-4 text-center text-gray-600">Kode belum masuk? <a href="{{ route('resend.otp') }}" class="text-blue-500">Kirim Ulang</a></p>
         </div>
     </div>
 </body>
