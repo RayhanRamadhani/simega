@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ListTask;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ListTaskController extends Controller
 {
@@ -32,6 +33,18 @@ class ListTaskController extends Controller
             'description' => 'nullable',
         ]);
 
+        $user = Auth::user(); // Ambil user yang sedang login
+        $task = Task::findOrFail($request->idtask);
+
+        // Hitung jumlah list task yang sudah dibuat untuk task ini
+        $existingListCount = $task->listTasks()->count();
+
+        // Jika tier akun free dan sudah ada 5 list task, tolak
+        if ($user->tier === 'free' && $existingListCount >= 5) {
+            return redirect()->back()->with('error', 'Akun free hanya dapat membuat maksimal 5 list task.');
+        }
+
+        // Jika lolos pengecekan, simpan data
         ListTask::create([
             'idtask' => $request->idtask,
             'listname' => $request->listname,

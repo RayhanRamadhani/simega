@@ -49,8 +49,23 @@ class TaskController extends Controller
             'description' => 'required',
         ]);
 
+        $user = Auth::user();
+
+        // Logika pembatasan task untuk user free
+        if ($user->tier === 'free') {
+            // Hitung total task yang belum completed
+            $unfinishedCount = Task::where('userid', $user->id)
+                ->where('status', '!=', 'completed') // Atau ->where('status', false) jika boolean
+                ->count();
+
+            if ($unfinishedCount >= 3) {
+                return redirect()->route('dashboard')->with('error', 'Akun Free hanya dapat memiliki maksimal 3 tugas aktif. Selesaikan tugas lama untuk menambah tugas baru.');
+            }
+        }
+
+        // Simpan task
         Task::create([
-            'userid' => Auth::id(),
+            'userid' => $user->id,
             'name' => $request->name,
             'deadline' => $request->deadline,
             'description' => $request->description,
