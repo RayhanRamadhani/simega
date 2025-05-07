@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chatbot', [ChatbotController::class, 'chatbot'])->name('chatbot');
     Route::post('/chatbot', 'App\Http\Controllers\ChatbotController');
     Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
+    Route::get('/priority', [TaskController::class, 'index'])->name('priority');
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('dashboardAdmin');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');

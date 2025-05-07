@@ -9,31 +9,58 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user_id = Auth::id();
-        $tasks = Task::where('userid', $user_id)->get();
-
-        $user = User::find($user_id);
-        if (is_null($user->email_verified_at)) {
-            return redirect()->route('send-email');
+        if ($request->route()->getName() == 'dashboard') {
+            $user_id = Auth::id();
+            $tasks = Task::where('userid', $user_id)->get();
+    
+            $user = User::find($user_id);
+            if (is_null($user->email_verified_at)) {
+                return redirect()->route('send-email');
+            }
+    
+            $totaltugas = Task::where('userid', $user_id)->count();
+            $listtugasselesai = Task::where('userid', $user_id)
+                ->where('status', 'completed')
+                ->count();
+            $sisalisttugas = $totaltugas - $listtugasselesai;
+    
+            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
+            return view('dashboard', compact(
+                'tasks',
+                'totaltugas',
+                'listtugasselesai',
+                'sisalisttugas',
+                'chartData'
+            ));
         }
-
-        $totaltugas = Task::where('userid', $user_id)->count();
-        $listtugasselesai = Task::where('userid', $user_id)
-            ->where('status', 'completed')
-            ->count();
-        $sisalisttugas = $totaltugas - $listtugasselesai;
-
-        $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
-
-        return view('dashboard', compact(
-            'tasks',
-            'totaltugas',
-            'listtugasselesai',
-            'sisalisttugas',
-            'chartData'
-        ));
+        
+        if ($request->route()->getName() == 'priority') {
+            $user_id = Auth::id();
+            $tasks = Task::where('ispriority', 1)->get();
+    
+            $user = User::find($user_id);
+            if (is_null($user->email_verified_at)) {
+                return redirect()->route('send-email');
+            }
+    
+            $totaltugas = Task::where('userid', $user_id)->count();
+            $listtugasselesai = Task::where('userid', $user_id)
+                ->where('status', 'completed')
+                ->count();
+            $sisalisttugas = $totaltugas - $listtugasselesai;
+    
+            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
+            return view('priority', compact(
+                'tasks',
+                'totaltugas',
+                'listtugasselesai',
+                'sisalisttugas',
+                'chartData'
+            ));
+        }
+        
     }
 
     public function create()
