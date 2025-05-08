@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Package;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,18 +15,18 @@ class TaskController extends Controller
         if ($request->route()->getName() == 'dashboard') {
             $user_id = Auth::id();
             $tasks = Task::where('userid', $user_id)->get();
-    
+
             $user = User::find($user_id);
             if (is_null($user->email_verified_at)) {
                 return redirect()->route('send-email');
             }
-    
+
             $totaltugas = Task::where('userid', $user_id)->count();
             $listtugasselesai = Task::where('userid', $user_id)
                 ->where('status', 'completed')
                 ->count();
             $sisalisttugas = $totaltugas - $listtugasselesai;
-    
+
             $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
             return view('dashboard', compact(
                 'tasks',
@@ -35,22 +36,22 @@ class TaskController extends Controller
                 'chartData'
             ));
         }
-        
+
         if ($request->route()->getName() == 'priority') {
             $user_id = Auth::id();
             $tasks = Task::where('ispriority', 1)->get();
-    
+
             $user = User::find($user_id);
             if (is_null($user->email_verified_at)) {
                 return redirect()->route('send-email');
             }
-    
+
             $totaltugas = Task::where('userid', $user_id)->count();
             $listtugasselesai = Task::where('userid', $user_id)
                 ->where('status', 'completed')
                 ->count();
             $sisalisttugas = $totaltugas - $listtugasselesai;
-    
+
             $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
             return view('priority', compact(
                 'tasks',
@@ -60,12 +61,25 @@ class TaskController extends Controller
                 'chartData'
             ));
         }
-        
+
     }
 
     public function create()
     {
-        return view('task.create');
+        $user = Auth::user();
+        $taskLimitReached = false;
+
+        if ($user->tier === 'free') {
+            $unfinishedCount = Task::where('userid', $user->id)
+                ->where('status', '!=', 'completed')
+                ->count();
+
+            $taskLimitReached = $unfinishedCount >= 3;
+        }
+
+        $packages = Package::all();
+
+        return view('task.create', compact('taskLimitReached', 'packages'));
     }
 
     public function store(Request $request)
@@ -80,9 +94,8 @@ class TaskController extends Controller
 
         // Logika pembatasan task untuk user free
         if ($user->tier === 'free') {
-            // Hitung total task yang belum completed
             $unfinishedCount = Task::where('userid', $user->id)
-                ->where('status', '!=', 'completed') // Atau ->where('status', false) jika boolean
+                ->where('status', '!=', 'completed')
                 ->count();
 
             if ($unfinishedCount >= 3) {

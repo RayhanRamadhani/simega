@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/toggle-priority', [TaskController::class, 'togglePriority'])
     ->name('task.toggle-priority');
     Route::patch('/list-task/{id}/toggle', [ListTaskController::class, 'toggleStatus'])->name('list-task.toggle');
+    Route::get('/checkout', function () {
+        return view ('checkout');
+    });
 });
 
 //////////////// GUEST
