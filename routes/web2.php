@@ -45,11 +45,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/toggle-priority', [TaskController::class, 'togglePriority'])
     ->name('task.toggle-priority');
     Route::patch('/list-task/{id}/toggle', [ListTaskController::class, 'toggleStatus'])->name('list-task.toggle');
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:routes/web.php
     Route::get('/checkout', function () {
         return view ('checkout');
     });
 =======
+=======
+>>>>>>> Stashed changes
     Route::get('/payment', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/payment/details/{transaction}', [PaymentController::class, 'showDetails'])->name('payment.details');
     Route::get('/payment-checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
@@ -58,7 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/details/{transaction}', [PaymentController::class, 'showDetails'])->name('payment.details');
     Route::get('/payment-checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment-checkout/success/{transaction}', [PaymentController::class, 'success'])->name('payment.checkout.success');
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:routes/web2.php
+=======
+>>>>>>> Stashed changes
 });
 
 //////////////// GUEST

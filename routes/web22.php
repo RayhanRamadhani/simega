@@ -15,6 +15,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 //////////////// AUTH
