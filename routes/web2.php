@@ -15,6 +15,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 //////////////// AUTH
@@ -44,9 +45,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/toggle-priority', [TaskController::class, 'togglePriority'])
     ->name('task.toggle-priority');
     Route::patch('/list-task/{id}/toggle', [ListTaskController::class, 'toggleStatus'])->name('list-task.toggle');
+<<<<<<< Updated upstream:routes/web.php
     Route::get('/checkout', function () {
         return view ('checkout');
     });
+=======
+    Route::get('/payment', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/details/{transaction}', [PaymentController::class, 'showDetails'])->name('payment.details');
+    Route::get('/payment-checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
+    Route::get('/payment-checkout/success/{transaction}', [PaymentController::class, 'success'])->name('payment.checkout.success');
+    Route::get('/payment', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/details/{transaction}', [PaymentController::class, 'showDetails'])->name('payment.details');
+    Route::get('/payment-checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
+    Route::get('/payment-checkout/success/{transaction}', [PaymentController::class, 'success'])->name('payment.checkout.success');
+>>>>>>> Stashed changes:routes/web2.php
 });
 
 //////////////// GUEST

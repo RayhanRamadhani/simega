@@ -2,7 +2,7 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <div class="container flex flex-col h-screen">
-    <!-- Header Chat -->
+
     <div class="flex justify-left items-center">
       <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">
       <div class="ml-4 text-left">
@@ -12,7 +12,6 @@
       </div>
     </div>
 
-    <!-- Isi chat -->
     <div class="messages flex-grow p-4 overflow-y-auto">
       <div class="left message flex mb-4">
         <img class="w-10 h-10 rounded-full mr-2 self-end" src="/images/roki_avatar.png" alt="Avatar">
@@ -20,7 +19,6 @@
       </div>
     </div>
 
-    <!-- Footer chat -->
     <div class="p-1 bg-white border-t sticky bottom-0 z-20">
       <form class="flex gap-2">
         <input type="text" id="message" name="message" 
@@ -44,18 +42,15 @@
         return;
       }
 
-      // Gaboleh ngetik pas lagi proses 
       $("#message").prop('disabled', true);
       $("form button").prop('disabled', true);
       
-      // Prompt user
       $(".messages").append(
         '<div class="right message flex justify-end mb-4">' +
         '<p class="bg-blue-300 rounded-lg p-3 max-w-xs">' + messageText + '</p>' +
         '</div>'
       );
       
-      // Auto scroll ke bawah
       $(".messages").scrollTop($(".messages")[0].scrollHeight);
       
       $.ajax({
@@ -68,10 +63,8 @@
           "content": messageText
         }
       }).done(function(res) {
-        // Parse markdown ke HTML dari Marked.js
         const formattedResponse = marked.parse(res);
         
-        // Rsepon roki make HTML
         $(".messages").append(
           '<div class="left message flex mb-4">' +
           '<img src="/images/roki_avatar.png" alt="Roki avatar" class="w-10 h-10 rounded-full mr-2 self-start">' + 
@@ -79,11 +72,9 @@
           '</div>'
         );
         
-        // Auto scroll ke bawah
         $(".messages").scrollTop($(".messages")[0].scrollHeight);
         
       }).fail(function(error) {
-        // Cek error
         $(".messages").append(
           '<div class="left message flex mb-4">' +
           '<img src="/images/roki_avatar.png" alt="Roki avatar" class="w-10 h-10 rounded-full mr-2 self-end">' +
@@ -93,7 +84,6 @@
         console.error("Error:", error);
         
       }).always(function() {
-        // Buka lagi form ngetiknya pas udah selesai proses
         $("#message").prop('disabled', false);
         $("form button").prop('disabled', false);
         $("#message").val('').focus();

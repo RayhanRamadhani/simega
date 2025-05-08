@@ -110,6 +110,8 @@
             body.classList.toggle('sidebar-open');
         });
     </script>
+
+    @yield('scripts')
 </body>
 
 </html>
