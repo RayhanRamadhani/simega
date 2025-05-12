@@ -81,7 +81,9 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">{{ Auth::user()->tier }}</button>
+                        <a href="{{ route("payment.process") }}">
+                            <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">{{ Auth::user()->tier }}</button>
+                        </a>
                         <a href="/profile"><img src="{{ Auth::user()->photo }}" alt="photo profile" class="w-10 h-10 rounded-full"></a>
                     </div>
                 </div>

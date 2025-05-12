@@ -1,36 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<title>Pembayaran</title>
-<div class="container w-full h-auto">
-    <div class="flex justify-left items-center" data-aos="fade-up" data-aos-duration="1500">
-        <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">
-        <div class="ml-4 text-left">
-            <h1 class="text-5xl font-bold">Hai,</h1>
-            <h2 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">{{ Auth::user()->firstname }}!</h2>
-            <p class="text-gray-600 text-lg">Mau Nugas Apa Hari Ini?</p>
+<div class="container">
+    <br>
+    <div class="flex justify-between items-center w-full">
+        <h1 class="text-2xl font-bold flex items-center space-x-2">
+            <span>Pembayaran</span>
+        </h1>
+    </div>
+    <br>
+    <br>
+    <div class="flex gap-32">
+        <div>
+          <p class="text-lg font-semibold">Nama Depan</p>
+          <p>{{ Auth::user()->firstname }}</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold">Nama Belakang</p>
+          <p>{{ Auth::user()->lastname }}</p>
         </div>
     </div>
-    <div class="flex justify-start">
-        <h1>Pembayaran</h1>
-        <div class="flex flex-col w-full md:w-1/2">
-            <div>
-                <h1>Nama Depan</h1>
-                <p>{{ Auth::user()->firstname }}</p>
-            </div>
-            <div>
-                <h1>Nama Belakang</h1>
-                <p>{{ Auth::user()->lastname }}</p>
-            </div>
-        </div>
-        <h1>Email</h1>
+    <br>
+    <div class="flex flex-col">
+        <p class="text-lg font-semibold">Email</p>
         <p>{{ Auth::user()->email }}</p>
-        <h1>Alamat</h1>
-        <p>Jl. Lohbener Lama</p>
     </div>
-    <div class="flex">
-        <button type="button" id="pay-button" class="flex flex-wrap bg-blue-400">Lanjut</button>
+    <br>
+    <div class="flex flex-col">
+        <p class="text-lg font-semibold">Alamat</p>
+        <p>{{ Auth::user()->email }}</p>
+    </div>
+    <br>
+
+    @php
+    $pro = \App\Models\Package::where('name', 'Pro')->first();
+    @endphp
+
+    @if ($pro)
+        <div class="flex flex-col items-end text-right text-blue-500">
+            <p class="text-lg font-bold">Harga</p>
+            @if ($pro->price > 0)
+                <span>
+                    Rp. {{ number_format($pro->price, 0, ',', '.') }}
+                </span>
+            @endif
+        </div>
+    @endif
+    <br>
+    <div class="flex items-center gap-x-4 justify-end w-full">
+        <a href="/dashboard" class="text-black font-semibold">Batal</a>
+        <button id="pay-button" type="submit" class="relative inline-flex items-center justify-center px-6 py-2 font-bold bg-gradient-to-r from-pink-500 to-blue-500 text-transparent bg-clip-text border border-blue-500 rounded-md hover:opacity-90">
+            Lanjut
+        </button>
     </div>
 </div>
 @endsection
