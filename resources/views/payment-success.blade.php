@@ -1,25 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<title>Pembayaran Sukses!</title>
-<div class="container w-full h-auto">
-    <div class="flex justify-left items-center" data-aos="fade-up" data-aos-duration="1500">
-        <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">
-        <div class="ml-4 text-left">
-            <h1 class="text-5xl font-bold">Hai,</h1>
-            <h2 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">{{ Auth::user()->firstname }}!</h2>
-            <p class="text-gray-600 text-lg">Mau Nugas Apa Hari Ini?</p>
-        </div>
-    </div>
-    <div class="flex bg-green-50">
-        <h1 class=" text-green-500">Pembayaranmu berhasil!</h1>
-        <p>Pembayaran telah berhasil</p>
+<title>Payment Successfull</title>
+<div class="flex justify-center bg-white">
+    <div class="text-center p-6">
+        <h1 class="text-2xl font-bold mb-6">Pembayaran berhasil!</h1>
+        <img src="{{ asset('images/lucu.png') }}" alt="Maskot" class="mx-auto mb-6 w-48">
+        <p class="text-gray-700 text-lg mb-8">
+            Pembayaran kamu berhasil, nikmati manfaat berlangganan dengan SIMEGA!<br>
+            Klik tombol lanjut di bawah ini untuk berpindah halaman atau halaman otomatis teralihkan dalam <span id="countdown">10</span> detik.
+        </p>
         <a href="{{ route('dashboard') }}">
-          <button>
-            Kembali ke Dashboard
-          </button>
+            <button class="bg-blue-400 text-white font-semibold px-6 py-2 rounded-xl shadow hover:bg-blue-600 transition">
+                Lanjut
+            </button>
         </a>
     </div>
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let counter = 10;
+        const countdownEl = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            counter--;
+            countdownEl.textContent = counter;
+            if (counter <= 0) {
+                clearInterval(interval);
+                window.location.href = "{{ route('dashboard') }}";
+            }
+        }, 1000);
+    });
+</script>
 @endsection

@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/details/{transaction}', [PaymentController::class, 'showDetails'])->name('payment.details');
     Route::get('/payment-checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment-checkout/success/{transaction}', [PaymentController::class, 'success'])->name('payment.checkout.success');
+    Route::get('/ps', function () {
+        return view ('payment-success');
+    });
 });
 
 //////////////// GUEST

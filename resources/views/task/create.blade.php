@@ -62,7 +62,7 @@
         <p class="text-gray-700 text-sm mb-6">
             Kamu bisa melanjutkan pembelian dengan menekan tombol di bawah ini:
         </p>
-        <a href="/checkout" class="border border-blue-500 inline-block w-40 py-2 rounded-full font-bold bg-gradient-to-r from-pink-500 to-blue-500 text-transparent bg-clip-text shadow hover:opacity-90 transition">
+        <a href="{{ route("payment.process")}}" class="border border-blue-500 inline-block w-40 py-2 rounded-full font-bold bg-gradient-to-r from-pink-500 to-blue-500 text-transparent bg-clip-text shadow hover:opacity-90 transition">
             Checkout
         </a>
         <button onclick="closeModal()" class="block mt-4 mx-auto hover:underline">Kembali</button>

@@ -28,8 +28,13 @@
     <br>
     <div class="flex flex-col">
         <p class="text-lg font-semibold">Alamat</p>
-        <p>{{ Auth::user()->email }}</p>
+        @if (empty(Auth::user()->address))
+            <p class="text-red-500">Belum memasukkan alamat, <a href="{{ route('profile') }}" class="text-blue-500 underline">klik disini untuk mengedit</a></p>
+        @else
+            <p>{{ Auth::user()->address }}</p>
+        @endif
     </div>
+
     <br>
 
     @php

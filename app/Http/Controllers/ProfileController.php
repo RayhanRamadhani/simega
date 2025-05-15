@@ -17,6 +17,7 @@ class ProfileController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'photo' => 'nullable|image|max:2048',
+            'address' => 'required',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -24,7 +25,7 @@ class ProfileController extends Controller
             $user->photo = '/storage/' . $path;
         }
 
-        $user->update($request->only('username', 'firstname', 'lastname'));
+        $user->update($request->only('username', 'firstname', 'lastname', 'address'));
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
     }

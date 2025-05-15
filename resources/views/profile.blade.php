@@ -45,6 +45,14 @@
         <p class="text-lg font-semibold">Email</p>
         <p>{{ Auth::user()->email }}</p>
     </div>
+    <div class="flex flex-col">
+        <p class="text-lg font-semibold">Alamat</p>
+        @if(Auth::user()->address)
+            <p>{{ Auth::user()->address }}</p>
+        @else
+            <p class="text-gray-500">Belum memasukkan alamat</p>
+        @endif
+    </div>
     <br>
     <br>
     <div class="flex items-center gap-x-2">
@@ -90,6 +98,11 @@
             <div class="mb-3">
                 <label for="email" class="block font-medium">Email</label>
                 <input type="email" name="email" value="{{ Auth::user()->email }}" class="border w-full px-3 py-2 rounded bg-gray-100 cursor-not-allowed" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="block font-medium">Alamat</label>
+                <input type="text" name="address" value="{{ Auth::user()->address }}" class="border w-full px-3 py-2 rounded" required>
             </div>
 
             <div class="flex justify-end gap-2">

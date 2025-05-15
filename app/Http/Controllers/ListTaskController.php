@@ -13,14 +13,14 @@ class ListTaskController extends Controller
         public function index($idtask)
     {
         $task = Task::findOrFail($idtask);
-        $listTasks = $task->listTasks()->latest()->get(); // Menampilkan semua list task untuk task tertentu
+        $listTasks = $task->listTasks()->latest()->get();
 
         return view('task.index', compact('task', 'listTasks'));
     }
 
     public function create(Request $request)
     {
-        $task = Task::findOrFail($request->idtask); // Ambil dari query string ?idtask=1
+        $task = Task::findOrFail($request->idtask);
         return view('list_task.create', compact('task'));
     }
 
@@ -33,7 +33,7 @@ class ListTaskController extends Controller
             'description' => 'nullable',
         ]);
 
-        $user = Auth::user(); // Ambil user yang sedang login
+        $user = Auth::user();
         $task = Task::findOrFail($request->idtask);
 
         // Hitung jumlah list task yang sudah dibuat untuk task ini
@@ -93,5 +93,4 @@ class ListTaskController extends Controller
 
         return back();
     }
-
 }
