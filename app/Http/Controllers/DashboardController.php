@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\TaskController;
 use App\Models\Task;
+use App\Models\ListTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +14,14 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $tasks = Task::where('userid', $user->id)->get();
+        $tasks = Task::where('userid', $user->id)->with('listtasks')->get();
+        $listTasks = ListTask::whereIn('idtask', $tasks->pluck('idtask'))->get();
 
         $totaltugas = Task::where('userid', $user->id)->count();
         $listtugasselesai = Task::where('status', 'done')->count();
         // // dibawah ini harusnya list tugas, cuman belum ada databasenya?
         $sisalisttugas = Task::where('status', 'null')->count();
-        
+
         $idtugas = Task::where('userid', $user->id)->get();
         $namatugas = Task::where('name', $user->name)->get();
         $deadlinetugas = Task::where('deadline', $user->deadline)->get();
@@ -32,7 +34,8 @@ class DashboardController extends Controller
             'idtugas',
             'namatugas',
             'deadlinetugas',
-            'tasks'
+            'tasks',
+            'listTasks'
         ));
     }
 }

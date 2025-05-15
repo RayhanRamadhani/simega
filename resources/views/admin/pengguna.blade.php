@@ -30,7 +30,7 @@
                         <th class="py-2 px-4">Nama Belakang</th>
                         <th class="py-2 px-4">Username</th>
                         <th class="py-2 px-4">Email</th>
-                        <th class="py-2 px-4">Role</th>
+                        <th class="py-2 px-4">Tier</th>
                         <th class="py-2 px-4 rounded-tr-lg">Tanggal daftar</th>
                     </tr>
                 </thead>

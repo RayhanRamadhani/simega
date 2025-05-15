@@ -92,14 +92,17 @@
         @endif
       </div>
 
-      <!-- List Tugas -->
+      {{-- List Tugas --}}
       <div class="flex flex-col mt-2 justify-start p-3 bg-blue-100 rounded-2xl">
         <ul class="list-disc pl-5 space-y-1">
-          <li>Ambil data dari list tugasnya di sini</li>
+            @forelse ($task->listTasks as $list)
+                <li>{{ $list->listname }}</li>
+             @empty
+                <li>Tidak ada list tugas.</li>
+            @endforelse
         </ul>
       </div>
 
-      <!-- Tombol hapus -->
       <div class="flex mt-3 justify-end">
         <form action="{{ route('task.destroy', $task->idtask) }}" method="POST" class="inline" onclick="event.stopPropagation()">
           @csrf
@@ -149,13 +152,6 @@
       }
     });
   </script>
-
-  <a href="{{ route('chatbot') }}" class="fixed overflow-clip bottom-0 right-4 flex flex-col items-center z-40 group" data-aos="fade-up">
-    <div class="mb-1 px-4 py-1 rounded-full border border-blue-500 text-sm font-semibold drop-shadow-xl-fuchsia-600 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600 transition-all group-hover:scale-105">
-        Butuh bantuan?
-    </div>
-    <img src="{{ asset('images/bb.png') }}" alt="Help Bot" class="w-24 h-20 object-contain">
-  </a>
 </div>
 
 @endsection

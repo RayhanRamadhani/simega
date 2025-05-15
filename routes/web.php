@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransactionsController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 //////////////// AUTH
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('task', TaskController::class);
     Route::resource('list-task', ListTaskController::class);
     Route::resource('pengguna', UserController::class);
+    Route::resource('transaction', TransactionsController::class);
     Route::resource('packages', PackageController::class);
     Route::get('/send-email', function(){
         \Mail::to(auth()->user()->email)->send(new \App\Mail\SendEmail());

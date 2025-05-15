@@ -40,8 +40,8 @@ class ListTaskController extends Controller
         $existingListCount = $task->listTasks()->count();
 
         // Jika tier akun free dan sudah ada 5 list task, tolak
-        if ($user->tier === 'free' && $existingListCount >= 5) {
-            return redirect()->back()->with('error', 'Akun free hanya dapat membuat maksimal 5 list task.');
+        if ($user->tier === 'free' && $existingListCount >= 3) {
+            return redirect()->back()->with('error', 'Akun free hanya dapat membuat maksimal 3 list task.');
         }
 
         // Jika lolos pengecekan, simpan data

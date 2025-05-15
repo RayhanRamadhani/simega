@@ -22,7 +22,7 @@
                         @endif
                         @if ($package->price > 0)
                             <span class="text-gray-400 text-sm font-normal block">
-                                Rp. {{ number_format($package->price, 0, ',', '.') }}/ 12 Bln
+                                Rp. {{ number_format($package->price, 0, ',', '.') }}/ {{ $package->duration_month }} Bln
                             </span>
                         @endif
                     </h4>
