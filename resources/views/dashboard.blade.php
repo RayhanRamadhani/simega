@@ -125,33 +125,80 @@
   </div>
 
   <script>
+    const chartData = @json($chartData);
+
+    // Ambil nama hari unik dari tanggal di chartData
+    const labels = chartData.map(item => {
+        const date = new Date(item.date);
+        return date.toLocaleDateString('id-ID', { weekday: 'short' }); // Contoh: Sen, Sel, Rab
+    });
+
+    const totalData = chartData.map(item => item.total);
+    const completedData = chartData.map(item => item.completed);
+    const remainingData = chartData.map(item => item.remaining);
+
     const ctx = document.getElementById('lineChart').getContext('2d');
     new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['S', 'S', 'R', 'K', 'J', 'S', 'M'],
-        datasets: [{
-          data: @json($chartData),
-          borderColor: '#3B82F6',
-          backgroundColor: 'transparent',
-          tension: 0.5,
-          pointRadius: 0,
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Total Tugas',
+                    data: totalData,
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'transparent',
+                    tension: 0.5,
+                    pointRadius: 0,
+                    borderWidth: 2,
+                },
+                {
+                    label: 'Tugas Selesai',
+                    data: completedData,
+                    borderColor: '#10B981',
+                    backgroundColor: 'transparent',
+                    tension: 0.5,
+                    pointRadius: 0,
+                    borderWidth: 2,
+                },
+                {
+                    label: 'Tugas Tersisa',
+                    data: remainingData,
+                    borderColor: '#EF4444',
+                    backgroundColor: 'transparent',
+                    tension: 0.5,
+                    pointRadius: 0,
+                    borderWidth: 2,
+                }
+            ]
         },
-        scales: {
-          x: { display: false },
-          y: { display: false },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true },
+            },
+            scales: {
+                x: {
+                    grid: { display: false }, 
+                    ticks: {
+                        color: '#000',
+                        font: { size: 12 }
+                    }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: {
+                        display: false
+                    },
+                    beginAtZero: true
+                }
+            }
         }
-      }
     });
-  </script>
+</script>
+
+
 </div>
 
 @endsection

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Package;
 use App\Models\Task;
+use App\Models\ListTask;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,19 +17,43 @@ class TaskController extends Controller
         if ($request->route()->getName() == 'dashboard') {
             $user_id = Auth::id();
             $tasks = Task::where('userid', $user_id)->get();
+            $taskid = $request->input('idtask');
+            $listTasks = ListTask::where('idtask', $taskid)->get();
+
 
             $user = User::find($user_id);
             if (is_null($user->email_verified_at)) {
                 return redirect()->route('send-email');
             }
 
-            $totaltugas = Task::where('userid', $user_id)->count();
-            $listtugasselesai = Task::where('userid', $user_id)
-                ->where('status', 'completed')
-                ->count();
+            $totaltugas = $tasks->count();
+            $listtugasselesai = $listTasks->where('isdone', '1')->count();
             $sisalisttugas = $totaltugas - $listtugasselesai;
+            $startDate = now()->subDays(6)->startOfDay();
+            $endDate = now()->endOfDay();
 
-            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
+            $tasksLast7Days = Task::where('userid', $user_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get();
+
+            $chartData = [];
+            for ($i = 0; $i < 7; $i++) {
+                $date = now()->subDays(6 - $i)->format('Y-m-d');
+                $dailyTasks = $tasksLast7Days->where('created_at', '>=', Carbon::parse($date)->startOfDay())
+                    ->where('created_at', '<=', Carbon::parse($date)->endOfDay());
+
+                $total = $dailyTasks->count();
+                $completed = $dailyTasks->where('isdone', 'true')->count();
+                $remaining = $total - $completed;
+
+                $chartData[] = [
+                    'date' => $date,
+                    'total' => $total,
+                    'completed' => $completed,
+                    'remaining' => $remaining,
+                ];
+            }
+
             return view('dashboard', compact(
                 'tasks',
                 'totaltugas',
