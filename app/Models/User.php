@@ -38,6 +38,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'package_expired_at',
     ];
 
     /**
@@ -51,5 +52,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function pushSubscriptions()
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
+
+    public function savePushSubscription($subscription)
+    {
+        $data = json_decode($subscription, true);
+
+        return $this->pushSubscriptions()->updateOrCreate(
+            ['endpoint' => $data['endpoint']],
+            [
+                'public_key' => $data['keys']['p256dh'] ?? null,
+                'auth_token' => $data['keys']['auth'] ?? null,
+            ]
+        );
     }
 }

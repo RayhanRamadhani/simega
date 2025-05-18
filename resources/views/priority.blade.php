@@ -40,7 +40,7 @@
             <div class="text-base font-bold text-blue-400">List tugas diselesaikan</div>
         </div>
         <div class="flex items-center justify-start">
-            <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas }}</div>
+            <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas11 }}</div>
             <div class="text-base font-bold text-black">Sisa list tugas</div>
         </div>
     </div>

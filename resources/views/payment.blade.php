@@ -5,7 +5,7 @@
     <br>
     <div class="flex justify-between items-center w-full">
         <h1 class="text-2xl font-bold flex items-center space-x-2">
-            <span>Pembayaran</span>
+            <span>Pembelian paket</span>
         </h1>
     </div>
     <br>
@@ -29,7 +29,7 @@
     <div class="flex flex-col">
         <p class="text-lg font-semibold">Alamat</p>
         @if (empty(Auth::user()->address))
-            <p class="text-red-500">Belum memasukkan alamat, <a href="{{ route('profile') }}" class="text-blue-500 underline">klik disini untuk mengedit</a></p>
+            <p class="text-gray-500">Belum memasukkan alamat, <a href="{{ route('profile') }}" class="text-blue-500">klik disini untuk mengedit</a></p>
         @else
             <p>{{ Auth::user()->address }}</p>
         @endif

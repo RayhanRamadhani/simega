@@ -54,11 +54,24 @@ class TaskController extends Controller
                 ];
             }
 
+            $totaltugas = Task::where('userid', $user_id)->count();
+            $totallisttugas = ListTask::where('userid', $user_id)->count();
+            $listtugasselesai = ListTask::where('userid', $user_id)
+                ->where('isdone', true)
+            $totallisttugas = ListTask::where('userid', $user_id)->count();
+            $listtugasselesai = ListTask::where('userid', $user_id)
+                ->where('isdone', true)
+                ->count();
+            $sisalisttugas1111 = $totallistlisttugas - $listtugasselesai;
+            $listtask = ListTask::where('userid', $user_id)->count();
+            $listtask = ListTask::where('userid', $user_id)->count();
+
+            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
             return view('dashboard', compact(
                 'tasks',
                 'totaltugas',
                 'listtugasselesai',
-                'sisalisttugas',
+                'sisalisttugas1111',
                 'chartData'
             ));
         }
@@ -73,17 +86,17 @@ class TaskController extends Controller
             }
 
             $totaltugas = Task::where('userid', $user_id)->count();
-            $listtugasselesai = Task::where('userid', $user_id)
-                ->where('status', 'completed')
+            $listtugasselesai = ListTask::where('userid', $user_id)
+                ->where('isdone', true)
                 ->count();
-            $sisalisttugas = $totaltugas - $listtugasselesai;
+            $sisalisttugas11 = $totaltugas - $listtugasselesai;
 
             $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
             return view('priority', compact(
                 'tasks',
                 'totaltugas',
                 'listtugasselesai',
-                'sisalisttugas',
+                'sisalisttugas11',
                 'chartData'
             ));
         }
@@ -95,7 +108,7 @@ class TaskController extends Controller
         $user = Auth::user();
         $taskLimitReached = false;
 
-        if ($user->tier === 'free') {
+        if ($user->tier === 'FREE') {
             $unfinishedCount = Task::where('userid', $user->id)
                 ->where('status', '!=', 'completed')
                 ->count();
@@ -119,7 +132,7 @@ class TaskController extends Controller
         $user = Auth::user();
 
         // Logika pembatasan task untuk user free
-        if ($user->tier === 'free') {
+        if ($user->tier === 'FREE') {
             $unfinishedCount = Task::where('userid', $user->id)
                 ->where('status', '!=', 'completed')
                 ->count();

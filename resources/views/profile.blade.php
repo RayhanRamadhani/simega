@@ -18,12 +18,15 @@
     <br>
     <div class="flex items-start gap-5">
         <img src="{{ Auth::user()->photo }}" class="w-24 h-24 rounded-full" alt="Profile Picture">
-        @php $user = Auth::user(); @endphp
-        @if($user->tier === 'pro')
+        @php
+            $user = Auth::user();
+            $package_expired = \Carbon\Carbon::parse($user->package_expired_at);
+        @endphp
+        @if($user->tier === 'PRO')
             <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg">PRO</button>
-            <p class="text-base text-blue-400">Sampai 26/06/2026</p>
+            <p class="text-base text-blue-400">Sampai {{ $package_expired->format('d M Y') }}</p>
         @else
-            <span class="border border-gray-400 text-gray-600 px-4 py-1 rounded-lg">{{ Auth::user()->tier }}</span>
+            <span class="border border-gray-400 text-gray-600 px-4 py-1 rounded-lg">FREE</span>
         @endif
     </div>
     <br>
@@ -70,13 +73,13 @@
 
 <div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden items-center justify-center">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
-        <h2 class="text-xl font-semibold mb-4">Edit Profile</h2>
+        <h2 class="text-xl font-semibold mb-4">Edit Profil</h2>
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="mb-3">
-                <label for="photo" class="block font-medium">Photo</label>
+                <label for="photo" class="block font-medium">Foto</label>
                 <input type="file" name="photo" id="photo" class="border w-full px-3 py-2 rounded">
             </div>
 

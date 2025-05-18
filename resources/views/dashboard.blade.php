@@ -8,7 +8,7 @@
         <img src="{{ asset('images/roki.png') }}" alt="Maskot" class="w-32 h-30">
         <div class="ml-4 text-left">
             <h1 class="text-5xl font-bold">Hai,</h1>
-            <h2 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">{{ Auth::user()->firstname }}!</h2>
+            <h2 class="text-5xl font-bold text-transparent bg-clip-text" style="background-image: linear-gradient(to right, #FF00BF, #3B82F6);">{{ Auth::user()->firstname }}!</h2>
             <p class="text-gray-600 text-lg">Mau Nugas Apa Hari Ini?</p>
         </div>
     </div>
@@ -40,20 +40,20 @@
               <div class="text-base font-bold text-blue-400">List tugas diselesaikan</div>
           </div>
           <div class="flex items-center justify-start">
-              <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas }}</div>
+              <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas11 }}</div>
               <div class="text-base font-bold text-black">Sisa list tugas</div>
           </div>
       </div>
   </div>
 
   {{-- DIV TUGAS --}}
-  <div class="flex flex-row flex-wrap mt-4 p-3 justify-content-start w-full mx-auto gap-4">
-    {{-- task cardnya terus looping data --}}
+  <div class="flex flex-row flex-wrap mt-4 p-3 justify-content-start w-full mx-auto gap-4" data-aos="fade-up" data-aos-duration="2500">
+    {{-- baca data task dan listtask --}}
     @forelse ($tasks as $task)
     <div class="task-card mt-4 p-6 rounded-2xl shadow-xl w-full md:w-5/12 lg:w-3/12 h-auto bg-white cursor-pointer"
          onclick="window.location='{{ route('task.edit', $task->idtask) }}'"
          data-task-id="{{ $task->idtask }}">
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center" >
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{{ $task->name }}</h1>
 
@@ -74,7 +74,15 @@
             </button>
           </form>
         </div>
-        <p>{{ $task->status ? '100%' : '0%' }}</p>
+
+        @php
+          // Hitung persentase per task
+          $totalListItems = $task->listTasks->count();
+          $completedItems = $task->listTasks->where('isdone', true)->count();
+          $taskPercentage = $totalListItems > 0 ? round(($completedItems / $totalListItems) * 100) : 0;
+        @endphp
+
+        <p class="{{ $taskPercentage == 100 ? 'text-green-500 font-bold' : '' }}">{{ $taskPercentage }}%</p>
       </div>
 
       <!-- Deadline -->
@@ -94,13 +102,29 @@
 
       {{-- List Tugas --}}
       <div class="flex flex-col mt-2 justify-start p-3 bg-blue-100 rounded-2xl">
-        <ul class="list-disc pl-5 space-y-1">
-            @forelse ($task->listTasks as $list)
-                <li>{{ $list->listname }}</li>
-             @empty
-                <li>Tidak ada list tugas.</li>
-            @endforelse
-        </ul>
+        @forelse ($task->listTasks as $list)
+          <div class="flex items-center space-x-3 my-1.5" onclick="event.stopPropagation()">
+            <form action="{{ route('list-task.toggle', $list->id) }}" method="POST" class="inline">
+              @csrf
+              @method('PATCH')
+              <button type="submit" class="flex items-center focus:outline-none">
+                @if ($list->isdone)
+                  <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                @else
+                  <div class="w-4 h-4 border-2 border-black rounded-full"></div>
+                @endif
+              </button>
+            </form>
+            <span class="{{ $list->isdone ? 'line-through text-gray-500' : 'text-gray-800' }} text-sm">{{ $list->listname }}</span>
+          </div>
+        @empty
+          <div class="flex items-center justify-center py-1">
+            <span class="text-sm text-gray-500">Tidak ada list tugas.</span>
+          </div>
+        @endforelse
       </div>
 
       <div class="flex mt-3 justify-end">
@@ -200,5 +224,12 @@
 
 
 </div>
+
+<a href="{{ route('chatbot') }}" class="fixed bottom-0 right-4 flex flex-col items-center z-40 group">
+    <div class="mb-1 min-h-9 min-w-4 rounded-full border border-blue-500 bg-white bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text px-4 py-1 text-sm font-semibold text-transparent shadow-xl transition-all group-hover:scale-105">
+        Butuh bantuan?
+    </div>
+    <img src="{{ asset('images/bb.png') }}" alt="Help Bot" class="w-24 h-20 object-contain">
+</a>
 
 @endsection

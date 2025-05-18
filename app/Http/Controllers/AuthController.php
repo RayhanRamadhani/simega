@@ -31,6 +31,11 @@ class AuthController extends Controller
                 if ($user->email_verified_at === null) {
                     return redirect()->route('send-email')->with('error', 'Kode OTP sudah dikirim, silakan cek email Anda.');
                 } else {
+                    $isexxpired = Carbon::now();
+                    if ($user->package_expired_at > $isexxpired) {
+                        $user->tier = 'FREE';
+                        $user->save();
+                    }
                     return redirect()->intended('/dashboard');
                 }
             }
@@ -105,6 +110,11 @@ class AuthController extends Controller
         }
 
         $user->email_verified_at = Carbon::now();
+        $user->otp = null;
+        $user->otp_expired_at = null;
+        $user->tier = 'FREE';
+        $user->username = strtolower(Auth::user()->firstname . Auth::user()->lastname . random_int(100, 999));
+        $user->photo = 'images/bb.png';
         $user->save();
         Auth::logout();
         $request->session()->invalidate();
