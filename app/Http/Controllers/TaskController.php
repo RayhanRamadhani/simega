@@ -57,13 +57,8 @@ class TaskController extends Controller
             $totaltugas = Task::where('userid', $user_id)->count();
             $totallisttugas = ListTask::where('userid', $user_id)->count();
             $listtugasselesai = ListTask::where('userid', $user_id)
-                ->where('isdone', true)
-            $totallisttugas = ListTask::where('userid', $user_id)->count();
-            $listtugasselesai = ListTask::where('userid', $user_id)
-                ->where('isdone', true)
-                ->count();
-            $sisalisttugas1111 = $totallistlisttugas - $listtugasselesai;
-            $listtask = ListTask::where('userid', $user_id)->count();
+                ->where('isdone', true);
+            $sisalisttugas11 = $totallistlisttugas - $listtugasselesai;
             $listtask = ListTask::where('userid', $user_id)->count();
 
             $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
