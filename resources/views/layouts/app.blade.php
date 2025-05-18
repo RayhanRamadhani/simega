@@ -133,27 +133,6 @@
             body.classList.toggle('sidebar-open');
         });
     </script>
-    <script>
-        // Inisialisasi ketika halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-        // Tambahkan tombol untuk mengaktifkan notifikasi di dashboard
-        const dashboardContent = document.querySelector('.container');
-        if (dashboardContent) {
-            const notificationBtn = document.createElement('button');
-            notificationBtn.textContent = 'Aktifkan Notifikasi Deadline';
-            notificationBtn.className = 'mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg';
-            notificationBtn.addEventListener('click', setupTaskNotifications);
-            
-            // Masukkan tombol setelah heading
-            const heading = document.querySelector('.container h2');
-            if (heading) {
-            heading.parentNode.insertBefore(notificationBtn, heading.nextSibling);
-            } else {
-            dashboardContent.prepend(notificationBtn);
-            }
-        }
-        });
-    </script>
 
     @yield('scripts')
 

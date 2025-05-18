@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
                     ->with('isuserexpired', $isuserexpired);
 
                 // Pindahkan logic update tier ke sini (bukan di view)
-                if ($isuserexpired > $isexxpired) {
+                if ($isexxpired > $isuserexpired) {
                     $user->tier = 'FREE';
                     $user->save();
                 }

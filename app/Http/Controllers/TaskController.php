@@ -9,6 +9,7 @@ use App\Models\ListTask;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class TaskController extends Controller
 {
@@ -36,37 +37,56 @@ class TaskController extends Controller
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
 
+            // Setup data chart berdasarkan hari dalam seminggu
             $chartData = [];
-            for ($i = 0; $i < 7; $i++) {
-                $date = now()->subDays(6 - $i)->format('Y-m-d');
-                $dailyTasks = $tasksLast7Days->where('created_at', '>=', Carbon::parse($date)->startOfDay())
-                    ->where('created_at', '<=', Carbon::parse($date)->endOfDay());
+            $dayNames = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+            $dayShort = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
 
-                $total = $dailyTasks->count();
-                $completed = $dailyTasks->where('isdone', 'true')->count();
-                $remaining = $total - $completed;
+            // Ambil awal minggu ini (Senin)
+            $startOfWeek = Carbon::now()->startOfWeek();
+
+            // Inisialisasi array untuk menyimpan data per hari
+            for ($i = 0; $i < 7; $i++) {
+                $currentDay = (clone $startOfWeek)->addDays($i);
+                $dayIndex = $currentDay->dayOfWeek - 1; // 0 = Senin, 6 = Minggu
+                if ($dayIndex < 0) $dayIndex = 6; // Koreksi untuk Carbon yang menganggap 0 = Minggu
+
+                // Ambil tugas untuk hari ini
+                $dailyTasks = Task::where('userid', $user_id)
+                    ->whereDate('created_at', $currentDay->toDateString())
+                    ->get();
+
+                // Ambil list tugas untuk hari ini
+                $dailyListTasks = ListTask::where('userid', $user_id)
+                    ->whereDate('created_at', $currentDay->toDateString())
+                    ->get();
+
+                // Hitung tugas dan yang selesai
+                $totalTasks = $dailyTasks->count();
+                $completedListTasks = $dailyListTasks->where('isdone', true)->count();
 
                 $chartData[] = [
-                    'date' => $date,
-                    'total' => $total,
-                    'completed' => $completed,
-                    'remaining' => $remaining,
+                    'day' => $dayShort[$dayIndex],
+                    'dayFull' => $dayNames[$dayIndex],
+                    'date' => $currentDay->toDateString(),
+                    'total' => $totalTasks,
+                    'completed' => $completedListTasks
                 ];
             }
 
             $totaltugas = Task::where('userid', $user_id)->count();
             $totallisttugas = ListTask::where('userid', $user_id)->count();
             $listtugasselesai = ListTask::where('userid', $user_id)
-                ->where('isdone', true);
-            $sisalisttugas11 = $totallistlisttugas - $listtugasselesai;
+                ->where('isdone', true)
+                ->count();
+            $sisalisttugas11 = $totallisttugas - $listtugasselesai;
             $listtask = ListTask::where('userid', $user_id)->count();
 
-            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
             return view('dashboard', compact(
                 'tasks',
                 'totaltugas',
                 'listtugasselesai',
-                'sisalisttugas1111',
+                'sisalisttugas11',
                 'chartData'
             ));
         }
@@ -80,13 +100,65 @@ class TaskController extends Controller
                 return redirect()->route('send-email');
             }
 
-            $totaltugas = Task::where('userid', $user_id)->count();
-            $listtugasselesai = ListTask::where('userid', $user_id)
+            // Hitung hanya tugas dengan ispriority = true
+            $totaltugas = Task::where('userid', $user_id)
+                ->where('ispriority', true)
+                ->count();
+
+            // Dapatkan ID dari semua tugas prioritas
+            $priorityTaskIds = Task::where('userid', $user_id)
+                ->where('ispriority', true)
+                ->pluck('idtask')
+                ->toArray();
+
+            // Hitung total list tugas untuk tugas prioritas
+            $totalListTasksPriority = ListTask::whereIn('idtask', $priorityTaskIds)->count();
+
+            // Hitung list tugas yang selesai untuk tugas prioritas
+            $listtugasselesai = ListTask::whereIn('idtask', $priorityTaskIds)
                 ->where('isdone', true)
                 ->count();
-            $sisalisttugas11 = $totaltugas - $listtugasselesai;
 
-            $chartData = [0, 2, 4, 6, 3, 8, $totaltugas];
+            // Hitung sisa list tugas
+            $sisalisttugas11 = $totalListTasksPriority - $listtugasselesai;
+
+            $chartData = [];
+            $dayNames = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+            $dayShort = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+
+            // Ambil awal minggu ini (Senin)
+            $startOfWeek = Carbon::now()->startOfWeek();
+
+            // Inisialisasi array untuk menyimpan data per hari
+            for ($i = 0; $i < 7; $i++) {
+                $currentDay = (clone $startOfWeek)->addDays($i);
+                $dayIndex = $currentDay->dayOfWeek - 1; // 0 = Senin, 6 = Minggu
+                if ($dayIndex < 0) $dayIndex = 6; // Koreksi untuk Carbon yang menganggap 0 = Minggu
+
+                // Ambil HANYA tugas prioritas untuk hari ini
+                $dailyTasks = Task::where('userid', $user_id)
+                    ->where('ispriority', true) // Filter hanya tugas prioritas
+                    ->whereDate('created_at', $currentDay->toDateString())
+                    ->get();
+
+                // Ambil list tugas yang terkait dengan tugas prioritas
+                $priorityTaskIds = $dailyTasks->pluck('idtask')->toArray();
+                $dailyListTasks = ListTask::whereIn('idtask', $priorityTaskIds)
+                    ->whereDate('created_at', $currentDay->toDateString())
+                    ->get();
+
+                // Hitung tugas prioritas dan list tugas yang selesai
+                $totalTasks = $dailyTasks->count();
+                $completedListTasks = $dailyListTasks->where('isdone', true)->count();
+
+                $chartData[] = [
+                    'day' => $dayShort[$dayIndex],
+                    'dayFull' => $dayNames[$dayIndex],
+                    'date' => $currentDay->toDateString(),
+                    'total' => $totalTasks,
+                    'completed' => $completedListTasks
+                ];
+            }
             return view('priority', compact(
                 'tasks',
                 'totaltugas',

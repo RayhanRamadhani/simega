@@ -149,18 +149,15 @@
   </div>
 
   <script>
+    // Ambil data chart dari controller
     const chartData = @json($chartData);
-
-    // Ambil nama hari unik dari tanggal di chartData
-    const labels = chartData.map(item => {
-        const date = new Date(item.date);
-        return date.toLocaleDateString('id-ID', { weekday: 'short' }); // Contoh: Sen, Sel, Rab
-    });
-
+    
+    // Ekstrak label dan data
+    const labels = chartData.map(item => item.day);
     const totalData = chartData.map(item => item.total);
     const completedData = chartData.map(item => item.completed);
-    const remainingData = chartData.map(item => item.remaining);
-
+    
+    // Setup chart
     const ctx = document.getElementById('lineChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -171,28 +168,22 @@
                     label: 'Total Tugas',
                     data: totalData,
                     borderColor: '#3B82F6',
-                    backgroundColor: 'transparent',
-                    tension: 0.5,
-                    pointRadius: 0,
-                    borderWidth: 2,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#3B82F6',
+                    borderWidth: 3,
+                    fill: true
                 },
                 {
-                    label: 'Tugas Selesai',
+                    label: 'List Tugas Diselesaikan',
                     data: completedData,
                     borderColor: '#10B981',
                     backgroundColor: 'transparent',
-                    tension: 0.5,
-                    pointRadius: 0,
-                    borderWidth: 2,
-                },
-                {
-                    label: 'Tugas Tersisa',
-                    data: remainingData,
-                    borderColor: '#EF4444',
-                    backgroundColor: 'transparent',
-                    tension: 0.5,
-                    pointRadius: 0,
-                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#10B981',
+                    borderWidth: 3
                 }
             ]
         },
@@ -200,20 +191,47 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: true },
+                legend: { 
+                    display: false,
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: false,
+                        boxWidth: 8
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#333',
+                    bodyColor: '#333',
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            // Tampilkan nama hari lengkap
+                            const index = tooltipItems[0].dataIndex;
+                            return chartData[index].dayFull;
+                        }
+                    }
+                }
             },
             scales: {
                 x: {
                     grid: { display: false }, 
                     ticks: {
-                        color: '#000',
-                        font: { size: 12 }
+                        color: '#333',
+                        font: { size: 10, weight: 'bold' }
                     }
                 },
                 y: {
-                    grid: { display: false },
+                    grid: { 
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
                     ticks: {
-                        display: false
+                        display: true,
+                        stepSize: 1,
+                        color: '#999',
+                        font: { size: 10 }
                     },
                     beginAtZero: true
                 }
