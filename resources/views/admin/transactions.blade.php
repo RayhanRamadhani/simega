@@ -29,7 +29,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-blue-500">Data pengguna tidak tersedia</td>
+                            <td colspan="6" class="text-center py-4 text-blue-500">Tidak ada riwayat transaksi</td>
                         </tr>
                     @endforelse
                 </tbody>
