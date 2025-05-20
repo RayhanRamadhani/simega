@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('otp')->nullable();
             $table->string('otp_expired_at')->nullable();
+            $table->string('package_expired_at')->nullable();
+            $table->tinyInteger('ischatting')->default(3)->nullable();
 
             $table->rememberToken();
             $table->timestamps();

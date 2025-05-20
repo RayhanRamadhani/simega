@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support;
+use Illuminate\Support\Carbon;
 use App\Models\Transaction;
 use App\Models\Package;
 
@@ -55,8 +57,10 @@ class PaymentController extends Controller
 
     public function success(Transaction $transaction) {
         $user = Auth::user();
+        $user->tier = 'PRO';
         $transaction->status = 'success';
-        $user->tier = 'pro';
+        $user->ischatting = null;
+        $user->package_expired_at = Carbon::now()->addMonth(1);
         $user->save();
         $transaction->save();
 

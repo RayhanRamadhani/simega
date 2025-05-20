@@ -40,7 +40,7 @@
             <div class="text-base font-bold text-blue-400">List tugas diselesaikan</div>
         </div>
         <div class="flex items-center justify-start">
-            <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas }}</div>
+            <div class="text-3xl font-extrabold mr-2">{{ $sisalisttugas11 }}</div>
             <div class="text-base font-bold text-black">Sisa list tugas</div>
         </div>
     </div>
@@ -120,29 +120,92 @@
   </div>
 
   <script>
+    // Ambil data chart dari controller
+    const chartData = @json($chartData);
+    
+    // Ekstrak label dan data
+    const labels = chartData.map(item => item.day);
+    const totalData = chartData.map(item => item.total);
+    const completedData = chartData.map(item => item.completed);
+    
+    // Setup chart
     const ctx = document.getElementById('lineChart').getContext('2d');
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['S', 'S', 'R', 'K', 'J', 'S', 'M'],
-        datasets: [{
-          data: @json($chartData),
-          borderColor: '#3B82F6',
-          backgroundColor: 'transparent',
-          tension: 0.5,
-          pointRadius: 0,
-          borderWidth: 2,
-        }]
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total Tugas',
+            data: totalData,
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: '#3B82F6',
+            borderWidth: 2,
+            fill: true
+          },
+          {
+            label: 'List tugas diselesaikan',
+            data: completedData,
+            borderColor: '#10B981',
+            backgroundColor: 'transparent',
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: '#10B981',
+            borderWidth: 2
+          }
+        ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+          legend: { 
+            display: false,
+            position: 'bottom',
+            labels: {
+              usePointStyle: false,
+              boxWidth: 8
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            titleColor: '#333',
+            bodyColor: '#333',
+            borderColor: '#ddd',
+            borderWidth: 1,
+            callbacks: {
+              title: function(tooltipItems) {
+                // Tampilkan nama hari lengkap
+                const index = tooltipItems[0].dataIndex;
+                return chartData[index].dayFull;
+              }
+            }
+          }
         },
         scales: {
-          x: { display: false },
-          y: { display: false },
+          x: {
+            grid: { display: false }, 
+            ticks: {
+              color: '#333',
+              font: { size: 10, weight: 'bold' }
+            }
+          },
+          y: {
+            grid: { 
+              display: true,
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              display: true,
+              stepSize: 1,
+              color: '#999',
+              font: { size: 10 }
+            },
+            beginAtZero: true
+          }
         }
       }
     });

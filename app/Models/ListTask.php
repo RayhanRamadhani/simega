@@ -13,11 +13,12 @@ class ListTask extends Model
 
     protected $fillable = [
         'idtask',
+        'userid',
         'listname',
         'date',
         'time',
         'description',
-        'isdone'
+        'isdone',
     ];
 
     public function task()

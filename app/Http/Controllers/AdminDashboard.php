@@ -14,9 +14,9 @@ class AdminDashboard extends Controller
     {
         $user = Auth::user();
 
-        $totalpengguna = User::count();
-        $penggunapro = User::where('tier', 'pro')->count();
-        $penggunamendaftar = User::whereDate('created_at', '>=', now()->startOfWeek())->count();
+        $totalpengguna = User::where('role', 'user')->count();
+        $penggunapro = User::where('tier', 'PRO')->count();
+        $penggunamendaftar = User::whereDate('created_at', '>=', now()->startOfWeek())->where('role', 'user')->count();
 
         $pendaftarperhari = collect(range(0, 6))->map(function($day) {
             $date = Carbon::now()->startOfWeek()->addDays($day);

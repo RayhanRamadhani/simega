@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idtask');
             $table->foreign('idtask')->references('idtask')->on('tasks')->onDelete('cascade');
+            $table->unsignedBigInteger('userid')->default(null)->nullable();
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
             $table->string('listname');
             $table->date('date');
             $table->time('time');
