@@ -22,6 +22,10 @@ class UserController extends Controller
             });
         }
 
+        if ($request->has('sort')) {
+        $query->orderBy('username', $request->sort === 'desc' ? 'desc' : 'asc');
+        }
+
         $pengguna = $query->latest()->paginate(5);
 
         return view('admin.pengguna', compact('pengguna'))->with('filters', $request->only(['search', 'role']));

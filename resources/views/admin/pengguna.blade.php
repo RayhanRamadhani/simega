@@ -9,11 +9,11 @@
             <h3 class="text-xl font-semibold">Daftar pengguna</h3>
 
             <form method="GET" action="" class="flex gap-2">
-                <button class="text-blue-500">
+                <a href="{{ request()->fullUrlWithQuery(['sort' => request('sort') === 'asc' ? 'desc' : 'asc']) }}" class="text-blue-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2H3V4zM3 8h18M6 12h12M9 16h6" />
                     </svg>
-                </button>
+                </a>
                 <input type="text" name="search" placeholder="Cari pengguna..." value="{{ request('search') }}" class="border border-gray-300 rounded-md px-3 py-1" />
                 <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                     Cari

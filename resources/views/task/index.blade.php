@@ -55,12 +55,12 @@
         @foreach ($listTasks as $list)
             <div class="flex items-center space-x-3 my-2">
                 <form action="{{ route('list-task.toggle', $list->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
+                @csrf
+                @method('PATCH')
                     <button type="submit" class="flex items-center">
                         @if ($list->isdone)
                             <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24">
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                         @else
@@ -68,7 +68,23 @@
                         @endif
                     </button>
                 </form>
-                <span class="{{ $list->isdone ? 'line-through' : '' }}">{{ $list->listname }}</span>
+                <span onclick="openModal({{ $list->id }})" class="cursor-pointer {{ $list->isdone ? 'line-through' : '' }}">
+                    {{ $list->listname }}
+                </span>
+
+                <span style="margin-left: auto; color: gray;">
+                    {{ $list->date }} {{ $list->time }}
+                </span>
+            </div>
+            <div id="modal-{{ $list->id }}" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+                <div class="bg-white p-6 rounded shadow-md w-96 relative">
+                    <button onclick="closeModal({{ $list->id }})" class="absolute top-2 right-3 text-gray-500 hover:text-black text-xl">&times;</button>
+                    <h2 class="text-lg font-semibold mb-4">Detail List Tugas</h2>
+                    <p><strong>Nama:</strong> {{ $list->listname }}</p>
+                    <p><strong>Tanggal:</strong> {{ $list->date }}</p>
+                    <p><strong>Waktu:</strong> {{ $list->time }}</p>
+                    <p><strong>Status:</strong> {{ $list->isdone ? 'Selesai' : 'Belum selesai' }}</p>
+                </div>
             </div>
         @endforeach
     </div>
@@ -79,6 +95,14 @@
             modal.classList.toggle('hidden');
             modal.classList.toggle('flex');
         }
+
+    function openModal(id) {
+        document.getElementById('modal-' + id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+        document.getElementById('modal-' + id).classList.add('hidden');
+    }
     </script>
 </div>
 

@@ -22,7 +22,7 @@
             <textarea name="description" rows="3" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tulis deskripsi tugas..."></textarea>
         </label>
         <div class="flex justify-between">
-            <a href="/task" class="text-gray-700 font-medium hover:underline">Batal</a>
+            <a href="{{ route('task.edit', $task->idtask) }}" class="text-gray-700 font-medium hover:underline">Batal</a>
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow">
                 Selesai
             </button>

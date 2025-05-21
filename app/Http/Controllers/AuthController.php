@@ -17,10 +17,17 @@ class AuthController extends Controller
 
     function authenticate(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'login' => ['required'],
             'password' => ['required']
         ]);
+
+        $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $credentials = [
+            $loginField => $request->login,
+            'password' => $request->password
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -41,8 +48,8 @@ class AuthController extends Controller
             }
         } else {
             return back()->withErrors([
-                'email' => 'Email atau password salah',
-            ])->onlyInput('email');
+                'login' => 'Email/Username atau password salah',
+            ])->onlyInput('login');
         }
     }
 
@@ -100,7 +107,7 @@ class AuthController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         if (Carbon::now()->isAfter($user->otp_expired_at)) {
             return back()->withErrors(['otp' => 'Yah, kode OTPnya udah kadaluarsa nih. Coba kirim ulang kode OTPnya.']);
         }
@@ -119,7 +126,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('login')
             ->with('success', 'Registrasi berhasil! Silahkan login dengan akun yang telah Kamu buat.');
     }
@@ -127,13 +134,13 @@ class AuthController extends Controller
     public function resendOtp(Request $request)
     {
         $user = Auth::user();
-        
+
         $user->otp = random_int(100000, 999999);
         $user->otp_expired_at = Carbon::now()->addMinutes(5);
         $user->save();
 
         \Mail::to($user->email)->send(new \App\Mail\SendEmail());
-        
+
         return redirect()->route('verify-email')
             ->with('success', 'Kirim ulang kode OTP berhasil! Cek kode OTP yang baru.');
     }

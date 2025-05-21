@@ -34,7 +34,7 @@
                         <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 2a4 4 0 100 8 4 4 0 000-8zM2 18a8 8 0 1116 0H2z" clip-rule="evenodd"/>
                         </svg>
-                        <input type="text" name="email" class="ml-2 w-full outline-none" placeholder="Masukkan username / email">
+                        <input type="text" name="login" class="ml-2 w-full outline-none" placeholder="Masukkan username / email">
                     </div>
                 </div>
 

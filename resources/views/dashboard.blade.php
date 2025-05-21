@@ -151,12 +151,12 @@
   <script>
     // Ambil data chart dari controller
     const chartData = @json($chartData);
-    
+
     // Ekstrak label dan data
     const labels = chartData.map(item => item.day);
     const totalData = chartData.map(item => item.total);
     const completedData = chartData.map(item => item.completed);
-    
+
     // Setup chart
     const ctx = document.getElementById('lineChart').getContext('2d');
     new Chart(ctx, {
@@ -191,7 +191,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { 
+                legend: {
                     display: false,
                     position: 'bottom',
                     labels: {
@@ -216,14 +216,14 @@
             },
             scales: {
                 x: {
-                    grid: { display: false }, 
+                    grid: { display: false },
                     ticks: {
                         color: '#333',
                         font: { size: 10, weight: 'bold' }
                     }
                 },
                 y: {
-                    grid: { 
+                    grid: {
                         display: true,
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
@@ -238,9 +238,8 @@
             }
         }
     });
-</script>
-
-
+    </script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 </div>
 
 <a href="{{ route('chatbot') }}" class="fixed bottom-0 right-4 flex flex-col items-center z-40 group">
