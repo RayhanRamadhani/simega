@@ -47,7 +47,7 @@
   </div>
 
   {{-- DIV TUGAS --}}
-  <div class="flex flex-row flex-wrap mt-4 p-3 justify-content-start w-full mx-auto gap-4" data-aos="fade-up" data-aos-duration="2500">
+  <div class="flex flex-row flex-wrap mt-4 p-3 justify-content-start w-full mx-auto gap-4">
     {{-- baca data task dan listtask --}}
     @forelse ($tasks as $task)
     <div class="task-card mt-4 p-6 rounded-2xl shadow-xl w-full md:w-5/12 lg:w-3/12 h-auto bg-white cursor-pointer"
