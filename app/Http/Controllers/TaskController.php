@@ -93,28 +93,32 @@ class TaskController extends Controller
 
         if ($request->route()->getName() == 'priority') {
             $user_id = Auth::id();
-            $tasks = Task::where('ispriority', 1)->get();
+
+            // Ambil hanya tugas prioritas milik user yang sedang login
+            $tasks = Task::where('userid', $user_id)
+                ->where('ispriority', 1)
+                ->get();
 
             $user = User::find($user_id);
             if (is_null($user->email_verified_at)) {
                 return redirect()->route('send-email');
             }
 
-            // Hitung hanya tugas dengan ispriority = true
+            // Hitung hanya tugas dengan ispriority = true milik user ini
             $totaltugas = Task::where('userid', $user_id)
                 ->where('ispriority', true)
                 ->count();
 
-            // Dapatkan ID dari semua tugas prioritas
+            // Dapatkan ID dari semua tugas prioritas milik user
             $priorityTaskIds = Task::where('userid', $user_id)
                 ->where('ispriority', true)
                 ->pluck('idtask')
                 ->toArray();
 
-            // Hitung total list tugas untuk tugas prioritas
+            // Hitung total list tugas untuk tugas prioritas user ini
             $totalListTasksPriority = ListTask::whereIn('idtask', $priorityTaskIds)->count();
 
-            // Hitung list tugas yang selesai untuk tugas prioritas
+            // Hitung list tugas yang selesai untuk tugas prioritas user ini
             $listtugasselesai = ListTask::whereIn('idtask', $priorityTaskIds)
                 ->where('isdone', true)
                 ->count();
@@ -133,21 +137,21 @@ class TaskController extends Controller
             for ($i = 0; $i < 7; $i++) {
                 $currentDay = (clone $startOfWeek)->addDays($i);
                 $dayIndex = $currentDay->dayOfWeek - 1; // 0 = Senin, 6 = Minggu
-                if ($dayIndex < 0) $dayIndex = 6; // Koreksi untuk Carbon yang menganggap 0 = Minggu
+                if ($dayIndex < 0) $dayIndex = 6;
 
-                // Ambil HANYA tugas prioritas untuk hari ini
+                // Ambil HANYA tugas prioritas milik user untuk hari ini
                 $dailyTasks = Task::where('userid', $user_id)
-                    ->where('ispriority', true) // Filter hanya tugas prioritas
+                    ->where('ispriority', true)
                     ->whereDate('created_at', $currentDay->toDateString())
                     ->get();
 
-                // Ambil list tugas yang terkait dengan tugas prioritas
                 $priorityTaskIds = $dailyTasks->pluck('idtask')->toArray();
+
+                // Ambil list tugas dari tugas prioritas milik user
                 $dailyListTasks = ListTask::whereIn('idtask', $priorityTaskIds)
                     ->whereDate('created_at', $currentDay->toDateString())
                     ->get();
 
-                // Hitung tugas prioritas dan list tugas yang selesai
                 $totalTasks = $dailyTasks->count();
                 $completedListTasks = $dailyListTasks->where('isdone', true)->count();
 
@@ -159,6 +163,7 @@ class TaskController extends Controller
                     'completed' => $completedListTasks
                 ];
             }
+
             return view('priority', compact(
                 'tasks',
                 'totaltugas',
