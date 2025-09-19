@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ListTaskController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
@@ -69,4 +70,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'authenticate']);
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/register', [AuthController::class, 'store']);
+     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('forgot.form');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('forgot.send');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('reset.form');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset.submit');
 });
