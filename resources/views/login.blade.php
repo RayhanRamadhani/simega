@@ -49,6 +49,7 @@
                     </div>
                 </div>
 
+                {{-- Maintenance -> Menambahkan fitur ingat saya dan lupa password --}}
                 <div class="flex items-center justify-between mb-4">
                     <label class="inline-flex items-center">
                         <input type="checkbox" name="remember" class="form-checkbox text-blue-600">

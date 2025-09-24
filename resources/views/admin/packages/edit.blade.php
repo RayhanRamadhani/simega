@@ -24,15 +24,20 @@
                 </div>
             </div>
 
+            {{-- Maintenance -> read only untuk paket yang gratis --}}
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Harga</label>
                 <input
                     type="number"
                     name="price"
                     value="{{ old('price', $package->price) }}"
+                    @if($package->price == 0) readonly @endif
                     class="w-full text-gray-800 bg-transparent focus:outline-none border-b border-gray-300 focus:border-blue-500"
                     required
                 />
+                @if($package->price == 0)
+                    <p class="text-sm text-red-500 mt-1">Harga paket gratis tidak bisa diubah.</p>
+                @endif
             </div>
 
             <div class="mb-6">

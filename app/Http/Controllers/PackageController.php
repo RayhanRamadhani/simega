@@ -22,6 +22,11 @@ class PackageController extends Controller
 
     public function update(Request $request, Package $package)
     {
+        // Maintenance Jika paket gratis (harga 0), jangan izinkan update harga
+        if ($package->price == 0) {
+            return redirect()->route('packages.index')->with('error', 'Harga paket gratis tidak boleh diubah.');
+        }
+
         $request->validate([
             'price' => 'required|integer',
         ]);
@@ -32,4 +37,5 @@ class PackageController extends Controller
 
         return redirect()->route('packages.index')->with('success', 'Paket berhasil diperbarui.');
     }
+
 }
